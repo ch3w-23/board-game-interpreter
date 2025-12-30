@@ -23,6 +23,7 @@
 #define SHM_KEY 0x1234
 #define GAME_ONGOING 0
 #define GAME_FINISHED 1
+#define MAX_NAME_LENGTH 20
 
 // Shared memory structure
 typedef struct {
@@ -37,6 +38,7 @@ typedef struct {
     int last_move_player;                 // Last move's player
     int last_move_col;                    // Last move's column
     int move_ready;                       // 1 when a move was applied for current turn
+    char player_names[MAX_PLAYERS][MAX_NAME_LENGTH];  // Player names
 } game_state_t;
 
 // Global variables
@@ -52,7 +54,7 @@ void init_shared_memory();
 void init_mutex();
 void cleanup(int sig);
 void sigchld_handler(int sig);
-void wait_for_player_connection(int player_id);
+int wait_for_player_connection(int player_id);
 void create_player_process(int player_id);
 void monitor_and_broadcast_updates(int player_id, int client_fd);
 void notify_clients_game_starting(int player_count);
@@ -115,18 +117,31 @@ int main(int argc, char *argv[]) {
                MAX_PLAYERS - player_id, MAX_PLAYERS);
         printf("Minimum needed to start: %d\n\n", MIN_PLAYERS);
         
-        // Wait for a player to connect
-        wait_for_player_connection(player_id);
-        
+        // Wait for a player to connect; retry same slot on failure
+        if (!wait_for_player_connection(player_id)) {
+            printf("[WARN] Handshake failed for Player %d; retrying same slot...\n", player_id + 1);
+            continue;
+        }
+
         // After connection, fork the player process
         create_player_process(player_id);
         
         player_id++;
         
-        // Check if we have enough players to start
+        // Auto-start if max players reached
+        if (player_id >= MAX_PLAYERS) {
+            printf("\nMAXIMUM PLAYERS REACHED!\n");
+            printf("We have %d players. Starting game!\n", 
+                   shared_game_state->player_count);
+            printf("\nSTARTING GAME WITH %d PLAYERS!\n", shared_game_state->player_count);
+            notify_clients_game_starting(shared_game_state->player_count);
+            start_game_threads();
+            break;
+        }
+        
+        // Allow manual start if we have minimum players
         if (shared_game_state->player_count >= MIN_PLAYERS) {
-            printf("\n═══════════════════════════════════════\n");
-            printf("MINIMUM PLAYERS REACHED!\n");
+            printf("\nMINIMUM PLAYERS REACHED!\n");
             printf("We have %d players. Game can start!\n", 
                    shared_game_state->player_count);
             printf("Waiting for all players to be ready...\n");
@@ -243,37 +258,99 @@ void sigchld_handler(int sig) {
     }
 }
 
-void wait_for_player_connection(int player_id) {
+int wait_for_player_connection(int player_id) {
     char client_fifo_name[50];
     sprintf(client_fifo_name, "/tmp/client_fifo_%d", player_id);
     
     printf("\n[WAITING] Waiting for Player %d to connect...\n", player_id+1);
-    printf("[INFO] Player %d should run: ./client %d\n", player_id+1, player_id);
     
     // Create the client FIFO for server->client messages
     mkfifo(client_fifo_name, 0666);
-    printf("[IPC] Created client FIFO: %s\n", client_fifo_name);
+    printf("[IPC] Created client FIFO\n");
     
     // Open server FIFO for reading client messages
     printf("[IPC] Waiting for message from Player %d on /tmp/server_fifo...\n", player_id + 1);
     int server_fd = open("/tmp/server_fifo", O_RDONLY);
-    
+
     if (server_fd < 0) {
         perror("Failed to open server FIFO");
-        return;
+        return 0;
     }
     
-    // Read the client's ready message
-    char buffer[100];
-    int bytes_read = read(server_fd, buffer, sizeof(buffer));
-    
-    if (bytes_read > 0) {
-        printf("═══════════════════════════════════════\n");
-        printf("[SUCCESS] Player %d connected!\n", player_id +1);
-        printf("[CLIENT MSG] Player %d says: %s\n", player_id +1, buffer);
+    // Read the client's registration message
+    char buffer[256];
+    char player_name[MAX_NAME_LENGTH] = "Player";
+    char temp_fifo[50] = "";
+    int got_register = 0, got_temp = 0;
+
+    // Block until we have both messages
+    while (!got_register || !got_temp) {
+        ssize_t bytes_read = read(server_fd, buffer, sizeof(buffer));
+
+        if (bytes_read > 0) {
+            int offset = 0;
+            while (offset < bytes_read) {
+                // Messages are written null-terminated; parse each chunk
+                size_t msg_len = strnlen(buffer + offset, bytes_read - offset);
+                if (msg_len == (size_t)(bytes_read - offset)) {
+                    // No terminator found in remaining buffer; wait for more data
+                    break;
+                }
+
+                const char *msg = buffer + offset;
+                if (!got_register && strncmp(msg, "REGISTER:", 9) == 0) {
+                    strncpy(player_name, msg + 9, MAX_NAME_LENGTH - 1);
+                    player_name[MAX_NAME_LENGTH - 1] = '\0';
+                    got_register = 1;
+                } else if (!got_temp && strncmp(msg, "TEMP_FIFO:", 10) == 0) {
+                    sscanf(msg + 10, "%49s", temp_fifo);
+                    got_temp = 1;
+                }
+
+                offset += (int)msg_len + 1; // step past terminator
+            }
+        } else if (bytes_read == 0) {
+            // Writer closed; reopen to keep waiting
+            close(server_fd);
+            server_fd = open("/tmp/server_fifo", O_RDONLY);
+            if (server_fd < 0) {
+                perror("Failed to reopen server FIFO");
+                return 0;
+            }
+        } else if (errno == EINTR) {
+            continue; // interrupted, retry
+        } else {
+            perror("Error reading server FIFO");
+            close(server_fd);
+            return 0;
+        }
     }
-    
+
     close(server_fd);
+
+    // Store player name in shared memory
+    pthread_mutex_lock(game_mutex);
+    strncpy(shared_game_state->player_names[player_id],
+            player_name, MAX_NAME_LENGTH);
+    pthread_mutex_unlock(game_mutex);
+
+    printf("═══════════════════════════════════════\n");
+    printf("[SUCCESS] %s connected as Player %d!\n",
+           player_name, player_id + 1);
+
+    // Respond on client's temp FIFO with assigned player ID
+    int temp_fd = open(temp_fifo, O_WRONLY);
+    if (temp_fd >= 0) {
+        char assign_msg[50];
+        snprintf(assign_msg, sizeof(assign_msg), "ASSIGNED:%d", player_id);
+        write(temp_fd, assign_msg, strlen(assign_msg) + 1);
+        close(temp_fd);
+    } else {
+        perror("Failed to open temp FIFO");
+        return 0;
+    }
+
+    return 1;
 }
 
 void create_player_process(int player_id) {
@@ -410,7 +487,10 @@ void *scheduler_thread(void *arg) {
         }
 
         char prompt[128];
-        snprintf(prompt, sizeof(prompt), "YOUR_TURN\nEnter column (0-7):");
+        pthread_mutex_lock(game_mutex);
+        snprintf(prompt, sizeof(prompt), "YOUR_TURN\n%s, enter column (0-7):",
+                shared_game_state->player_names[shared_game_state->current_player]);
+        pthread_mutex_unlock(game_mutex);
         send_to_client(shared_game_state->current_player, prompt);
 
         // Wait for move to be applied by reader thread
@@ -425,7 +505,10 @@ void *scheduler_thread(void *arg) {
         // Broadcast last move
         char msg[128];
         pthread_mutex_lock(game_mutex);
-        snprintf(msg, sizeof(msg), "MOVE Player %d -> Col %d", shared_game_state->last_move_player + 1, shared_game_state->last_move_col);
+        // Use player_names array instead of player number
+        snprintf(msg, sizeof(msg), "MOVE %s -> Col %d", 
+                shared_game_state->player_names[shared_game_state->last_move_player], 
+                shared_game_state->last_move_col);
         pthread_mutex_unlock(game_mutex);
         for (int i = 0; i < shared_game_state->player_count; i++) {
             if (shared_game_state->active_players[i]) {
