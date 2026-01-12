@@ -117,42 +117,44 @@ int main(int argc, char *argv[]) {
         int bytes_read = read(my_fd, buffer, sizeof(buffer));
         
         if (bytes_read > 0) {
-            // Check if it's a board update (contains BOARD marker)
-            if (strstr(buffer, "BOARD") != NULL) {
-                // Clear screen for better display (optional)
-                // printf("\033[H\033[J");  // Clear screen
-                printf("\n%s\n", buffer);
-            } else {
-                printf("\n[SERVER] %s\n", buffer);
-            }
-            
-            // If it's our turn, prompt and send move to server
-            if (strncmp(buffer, "YOUR_TURN", 9) == 0) {
-                char input[32];
-                printf("\n%s, enter column (0-7): ", player_name);
-                fflush(stdout);
-                if (fgets(input, sizeof(input), stdin) != NULL) {
-                    int col = atoi(input);
-                    char move_msg[100];
-                    // Use player_id (0-based) for move messages
-                    sprintf(move_msg, "PLAYER_%d_MOVE_%d", player_id + 1, col);
-                    write(server_fd, move_msg, strlen(move_msg) + 1);
-                    printf("[%s] Move sent: column %d\n", player_name, col);
+            int offset = 0;
+            // Loop through all messages in the buffer
+            while (offset < bytes_read) {
+                char *current_msg = buffer + offset;
+                
+                // 1. Check for Board Update
+                if (strstr(current_msg, "BOARD") != NULL) {
+                    printf("\n%s\n", current_msg);
+                } 
+                // 2. Check for Turn
+                else if (strstr(current_msg, "YOUR_TURN") != NULL) {
+                    char input[32];
+                    printf("\nYOUR_TURN\n%s, enter column (0-7): ", player_name);
+                    fflush(stdout);
+                    if (fgets(input, sizeof(input), stdin) != NULL) {
+                        int col = atoi(input);
+                        char move_msg[100];
+                        sprintf(move_msg, "PLAYER_%d_MOVE_%d", player_id + 1, col);
+                        write(server_fd, move_msg, strlen(move_msg) + 1);
+                        printf("[%s] Move sent: column %d\n", player_name, col);
+                    }
                 }
+                // 3. Check for Game Over
+                else if (strstr(current_msg, "GAME OVER") != NULL || strstr(current_msg, "wins") != NULL) {
+                    printf("\n[SERVER] %s\n", current_msg);
+                    printf("Game session ended.\n");
+                    close(my_fd);
+                    close(server_fd);
+                    return 0;
+                }
+                // 4. Normal Message
+                else {
+                    printf("\n[SERVER] %s\n", current_msg);
+                }
+
+                // Jump to the next message (skip the null terminator)
+                offset += strlen(current_msg) + 1;
             }
-            
-            // Check for game over
-            if (strstr(buffer, "GAME OVER") != NULL || 
-                strstr(buffer, "wins") != NULL) {
-                printf("\nGame session ended.\n");
-                break;
-            }
-        } else if (bytes_read == 0) {
-            printf("\n[DISCONNECTED] Server closed connection\n");
-            break;
-        } else {
-            perror("Read error");
-            break;
         }
     }
     
