@@ -13,6 +13,7 @@
 #include <pthread.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <poll.h>
 
 
 // Define constants
@@ -258,18 +259,45 @@ void sigchld_handler(int sig) {
     
     // Reap all zombie children
     while ((pid = waitpid(-1, &status, WNOHANG)) > 0) {
-        printf("Child process %d terminated\n", pid);
-        
-        // Mark player as inactive
         pthread_mutex_lock(game_mutex);
+        int player_idx = -1;
+        int active_count = 0;
+
         for (int i = 0; i < MAX_PLAYERS; i++) {
             if (shared_game_state->player_pids[i] == pid) {
-                shared_game_state->active_players[i] = 0;
-                printf("Player %d disconnected\n", i + 1);
-                break;
+                shared_game_state->active_players[i] = 0; // Mark inactive
+                player_idx = i;
+            }
+            if (shared_game_state->active_players[i] == 1) {
+                active_count++;
             }
         }
         pthread_mutex_unlock(game_mutex);
+
+        if (player_idx != -1) {
+            printf("\n[ALERT] Player %d disconnected! (PID: %d)\n", player_idx + 1, pid);
+            printf("[STATUS] Active players remaining: %d\n", active_count);
+            fflush(stdout); 
+        }
+    }
+
+    // --- UPDATED AUTO-SHUTDOWN LOGIC ---
+    pthread_mutex_lock(game_mutex);
+    int remaining = 0;
+    // We also check 'player_count' to ensure we don't shut down 
+    // before the game has even started (e.g., when 0 players have joined yet).
+    // We only shut down if players HAVE joined at some point but are now all gone.
+    int total_joined = shared_game_state->player_count;
+    
+    for (int i = 0; i < MAX_PLAYERS; i++) {
+        if (shared_game_state->active_players[i]) remaining++;
+    }
+    pthread_mutex_unlock(game_mutex);
+
+    // If we had players (total_joined > 0) but now have 0 left, shutdown.
+    if (total_joined > 0 && remaining == 0) {
+        printf("\n[SERVER] All players disconnected. Server shutting down safely.\n");
+        cleanup(0); // This exits the program and frees memory
     }
 }
 
@@ -416,24 +444,38 @@ void create_player_process(int player_id) {
 
 void monitor_and_broadcast_updates(int player_id, int client_fd) {
     int last_seen_move = -1;
+    struct pollfd pfd;
+
+    // Set up polling to check for errors/disconnection
+    pfd.fd = client_fd;
+    pfd.events = POLLERR | POLLHUP; // We care about errors or hang-ups
    
     while (1) {
-        // Safely read the current move count from shared memory
+        // 1. Connection Health Check
+        pfd.revents = 0; // Reset events
+        // Check status (timeout 0 means don't wait, just check instantly)
+        if (poll(&pfd, 1, 0) > 0) {
+            if (pfd.revents & (POLLERR | POLLHUP)) {
+                printf("[CHILD] Detected disconnect for Player %d. Exiting handler.\n", player_id + 1);
+                break; // Exit loop -> Child process dies -> SIGCHLD sent to Parent
+            }
+        }
+
+        // 2. Board Update Check (Your original logic)
         pthread_mutex_lock(game_mutex);
         int current_move_count = shared_game_state->move_count;
         pthread_mutex_unlock(game_mutex);
         
-        // Check if game state has changed since last check
         if (current_move_count != last_seen_move) {
             last_seen_move = current_move_count;
             char board_msg[1024];
             format_board(board_msg, sizeof(board_msg));
-            write(client_fd, board_msg, strlen(board_msg) + 1);
+            
             // Send update to client
+            // If this write fails, we also know client is gone
             if (write(client_fd, board_msg, strlen(board_msg) + 1) < 0) {
-                // Client may have disconnected
                 perror("Write to client FIFO failed");
-                break;  // Exit monitoring loop
+                break; 
             }
         }
         usleep(100000); // 100ms polling interval
@@ -477,15 +519,62 @@ void send_to_client(int player_id, const char *msg) {
 void *scheduler_thread(void *arg) {
     int current = 0;
     while (1) {
-        // [Safety Check] Stop if game is over
+        // --- NEW LOGIC: CHECK PLAYER COUNT ---
         pthread_mutex_lock(game_mutex);
-        if (shared_game_state->player_count < MIN_PLAYERS) {
-            pthread_mutex_unlock(game_mutex);
-            sleep(1);
-            continue;
+        
+        int active_count = 0;
+        for (int i = 0; i < MAX_PLAYERS; i++) {
+            if (shared_game_state->active_players[i]) active_count++;
         }
+
+// STOP LOGIC: If we have fewer than 3 players, ABORT GAME
+        if (active_count < MIN_PLAYERS) {
+            if (shared_game_state->game_state != GAME_FINISHED) {
+                printf("\n══════════════════════════════════════════\n");
+                printf("[GAME ABORTED] Player count (%d) below minimum (%d).\n", active_count, MIN_PLAYERS);
+                printf("[GAME ABORTED] Not enough players to continue. Ending session.\n");
+                printf("══════════════════════════════════════════\n");
+                fflush(stdout);
+
+                // 1. Send GAME OVER to all remaining clients
+                // The keyword "GAME OVER" makes the client disconnect automatically
+                char msg[] = "GAME OVER: Not enough players! Session aborted.";
+                for(int i=0; i<MAX_PLAYERS; i++) {
+                     if(shared_game_state->active_players[i]) {
+                         char fifo_name[50];
+                         sprintf(fifo_name, "/tmp/client_fifo_%d", i);
+                         int fd = open(fifo_name, O_WRONLY | O_NONBLOCK);
+                         if (fd >= 0) {
+                            write(fd, msg, strlen(msg) + 1);
+                            close(fd);
+                         }
+                     }
+                }
+                
+                // 2. Mark game as finished
+                shared_game_state->game_state = GAME_FINISHED;
+                
+                // 3. Reset the board for safety (optional)
+                reset_game();
+            }
+            
+            pthread_mutex_unlock(game_mutex);
+            
+            printf("[SCHEDULER] Game ended. Scheduler thread exiting.\n");
+            return NULL; // EXIT THE THREAD completely. Game is over.
+        }
+
+        // RESUME LOGIC: If we have enough players again
+        if (shared_game_state->game_state == GAME_FINISHED && active_count >= MIN_PLAYERS) {
+             shared_game_state->game_state = GAME_ONGOING;
+             printf("[GAME RESUME] Enough players connected. Game continuing!\n");
+        }
+        pthread_mutex_unlock(game_mutex);
+        // --- END NEW LOGIC ---
+
         
         // 1. Find next active player (Round Robin)
+        pthread_mutex_lock(game_mutex); // Lock again for turn logic
         int found = 0;
         for (int k = 0; k < MAX_PLAYERS; k++) {
             int idx = (current + k) % MAX_PLAYERS;
@@ -499,7 +588,10 @@ void *scheduler_thread(void *arg) {
         }
         pthread_mutex_unlock(game_mutex);
 
-        if (!found) continue;
+        if (!found) {
+            usleep(100000);
+            continue;
+        }
 
         // 2. Prompt current player
         char prompt[128];
@@ -511,37 +603,49 @@ void *scheduler_thread(void *arg) {
         while (1) {
             pthread_mutex_lock(game_mutex);
             int ready = shared_game_state->move_ready;
+            
+            // Safety check: Did the current player disconnect while we were waiting?
+            if (shared_game_state->active_players[shared_game_state->current_player] == 0) {
+                ready = -1; // Force exit loop
+            }
+            
             pthread_mutex_unlock(game_mutex);
-            if (ready) break;
+            
+            if (ready == 1) break; // Move made
+            if (ready == -1) break; // Player disconnected
             usleep(100000); // Wait 100ms
         }
+        
+        // If player disconnected during turn, restart loop
+        pthread_mutex_lock(game_mutex);
+        if (shared_game_state->active_players[shared_game_state->current_player] == 0) {
+            pthread_mutex_unlock(game_mutex);
+            continue;
+        }
+        pthread_mutex_unlock(game_mutex);
 
         // 4. Check for Win
         pthread_mutex_lock(game_mutex);
         int won = check_win();
         if (won) {
-            // Who moved last? They are the winner.
             int winner_idx = shared_game_state->last_move_player;
             char *winner_name = shared_game_state->player_names[winner_idx];
             
             printf("WINNER: %s!\n", winner_name);
-            update_score(winner_name); // Save to file
+            update_score(winner_name); 
             
             char win_msg[100];
             sprintf(win_msg, "GAME OVER! Winner is %s", winner_name);
             
-            // Broadcast win
             for (int i=0; i<shared_game_state->player_count; i++) 
                 send_to_client(i, win_msg);
             
-            // Reset for next game
-            sleep(5); // Give them time to read
+            sleep(5); 
             reset_game();
             pthread_mutex_unlock(game_mutex);
-            continue; // Start loop again
+            continue; 
         }
         
-        // Check for Draw (Board Full)
         if (shared_game_state->move_count >= 64) {
              printf("GAME DRAW!\n");
              for (int i=0; i<shared_game_state->player_count; i++) 
@@ -552,7 +656,6 @@ void *scheduler_thread(void *arg) {
              continue;
         }
         
-        // Broadcast move if no win
         char msg[128];
         snprintf(msg, sizeof(msg), "MOVE %s -> Col %d", 
                 shared_game_state->player_names[shared_game_state->last_move_player], 
