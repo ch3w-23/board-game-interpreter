@@ -47,6 +47,7 @@ typedef struct {
     int last_move_col;                    // Last move's column
     int last_move_row;                    // Last move's row
     int move_ready;                       // 1 when a move was applied for current turn
+    sem_t move_sem;                       // signals scheduler that a valid move was applied
     char player_names[MAX_PLAYERS][MAX_NAME_LENGTH];  // Player names
 
     struct {
@@ -147,6 +148,8 @@ int main(int argc, char *argv[]) {
     // (Safe here: before fork())
     sem_init(&shared_game_state->log_items, 1, 0);
     sem_init(&shared_game_state->log_space, 1, LOG_QUEUE_CAP);
+    // Scheduler wait semaphore (pshared=1, initial=0)
+    sem_init(&shared_game_state->move_sem, 1, 0);
 
     // Initialize board
     for (int i = 0; i < BOARD_ROWS; i++) {
@@ -906,6 +909,7 @@ void *scheduler_thread(void *arg) {
     while (1) {
         // --- CHECK ACTIVE PLAYER COUNT SAFELY ---
         pthread_mutex_lock(game_mutex);
+        update_score(winner_name);
         int active_count = 0;
         int total_joined = shared_game_state->player_count;
         for (int i = 0; i < MAX_PLAYERS; i++) {
@@ -996,21 +1000,45 @@ void *scheduler_thread(void *arg) {
 
         send_to_client(chosen, prompt);
 
-        // 4) Wait for their move
-        while (1) {
-            pthread_mutex_lock(game_mutex);
-            int ready = shared_game_state->move_ready;
+        // // 4) Wait for their move
+        // while (1) {
+        //     pthread_mutex_lock(game_mutex);
+        //     int ready = shared_game_state->move_ready;
 
-            // If current player disconnected while waiting
+        //     // If current player disconnected while waiting
+        //     if (shared_game_state->active_players[shared_game_state->current_player] == 0) {
+        //         ready = -1;
+        //     }
+
+        //     pthread_mutex_unlock(game_mutex);
+
+        //     if (ready == 1) break;
+        //     if (ready == -1) break;
+        //     usleep(100000);
+        // }
+
+        // 4) Wait for the move (no busy-wait)
+        // If current player disconnects while waiting, scheduler will detect it.
+        while (1) {
+            // block until a move is applied
+            sem_wait(&shared_game_state->move_sem);
+
+            pthread_mutex_lock(game_mutex);
+
+            // If player disconnected, abandon this wait and choose next player
             if (shared_game_state->active_players[shared_game_state->current_player] == 0) {
-                ready = -1;
+                pthread_mutex_unlock(game_mutex);
+                break; // go pick next active player
+            }
+
+            // If move is ready, we can proceed to win/draw check
+            if (shared_game_state->move_ready == 1) {
+                pthread_mutex_unlock(game_mutex);
+                break;
             }
 
             pthread_mutex_unlock(game_mutex);
-
-            if (ready == 1) break;
-            if (ready == -1) break;
-            usleep(100000);
+            // If we woke up but move_ready isn't set, keep waiting
         }
 
         // If player disconnected during turn, continue loop
@@ -1112,6 +1140,9 @@ void *server_reader_thread(void *arg) {
                     ok = apply_move(player_num, col);
                     if (ok) {
                         shared_game_state->move_ready = 1;
+
+                        // Wake scheduler immediately (no busy-wait needed)
+                        sem_post(&shared_game_state->move_sem);
                     }
                 }
 
@@ -1216,7 +1247,7 @@ void save_scores() {
 
 // Update the winner's score safely
 void update_score(const char *winner_name) {
-    pthread_mutex_lock(game_mutex);// protect shared memory
+    
 
     int found = 0;
     // Check if player exists
@@ -1231,6 +1262,7 @@ void update_score(const char *winner_name) {
     if (!found && shared_game_state->total_scores_stored < 100) {
         int idx = shared_game_state->total_scores_stored;
         strncpy(shared_game_state->scores[idx].name, winner_name, MAX_NAME_LENGTH);
+        shared_game_state->scores[idx].name[MAX_NAME_LENGTH - 1] = '\0';
         shared_game_state->scores[idx].wins = 1;
         shared_game_state->total_scores_stored++;
     }
