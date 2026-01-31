@@ -909,7 +909,7 @@ void *scheduler_thread(void *arg) {
     while (1) {
         // --- CHECK ACTIVE PLAYER COUNT SAFELY ---
         pthread_mutex_lock(game_mutex);
-        update_score(winner_name);
+        // update_score(winner_name);
         int active_count = 0;
         int total_joined = shared_game_state->player_count;
         for (int i = 0; i < MAX_PLAYERS; i++) {
@@ -1056,6 +1056,7 @@ void *scheduler_thread(void *arg) {
         if (won) {
             int winner_idx = shared_game_state->last_move_player;
             char *winner_name = shared_game_state->player_names[winner_idx];
+            update_score(winner_name);
 
             printf("WINNER: %s!\n", winner_name);
             update_score(winner_name);
@@ -1136,29 +1137,41 @@ void *server_reader_thread(void *arg) {
 
                 pthread_mutex_lock(game_mutex);
 
-                if (player_num == shared_game_state->current_player && shared_game_state->active_players[player_num]) {
+                // only current player can move
+                if (player_num == shared_game_state->current_player &&
+                    shared_game_state->active_players[player_num]) {
+
                     ok = apply_move(player_num, col);
+
                     if (ok) {
+                        moved_row = shared_game_state->last_move_row;
+
+                        strncpy(pname, shared_game_state->player_names[player_num], MAX_NAME_LENGTH - 1);
+                        pname[MAX_NAME_LENGTH - 1] = '\0';
+
                         shared_game_state->move_ready = 1;
 
-                        // Wake scheduler immediately (no busy-wait needed)
-                        sem_post(&shared_game_state->move_sem);
+                        // wake scheduler only on VALID move
+                         sem_post(&shared_game_state->move_sem);
                     }
                 }
 
                 pthread_mutex_unlock(game_mutex);
 
-                if (!ok) {
-                        log_event("MOVE player=%d name=%s col=%d row=%d", player_num + 1, pname, col, moved_row);
+                if (ok) {
+                    // ✅ log real name + row
+                    log_event("MOVE player=%d name=%s col=%d row=%d",
+                            player_num + 1, pname, col, moved_row);
                 } else {
+                    // invalid -> tell that player + resend turn prompt
                     send_to_client(player_num, "INVALID MOVE. Try again.");
-                    
-                    // [FIX] Resend the turn prompt so the client unlocks!
+
                     char prompt[128];
                     pthread_mutex_lock(game_mutex);
                     snprintf(prompt, sizeof(prompt), "YOUR_TURN\n%s, enter column (0-7):",
                             shared_game_state->player_names[player_num]);
                     pthread_mutex_unlock(game_mutex);
+
                     send_to_client(player_num, prompt);
                 }
             }
