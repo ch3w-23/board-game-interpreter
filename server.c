@@ -616,7 +616,7 @@ void log_event(const char *fmt, ...) {
     strftime(ts, sizeof(ts), "%Y-%m-%d %H:%M:%S", &tm_now);
 
     // Format body
-    char body[LOG_MSG_MAX];
+    char body[LOG_MSG_MAX - 50]; // Leave room for timestamp and separator
     va_list ap;
     va_start(ap, fmt);
     vsnprintf(body, sizeof(body), fmt, ap);
@@ -680,7 +680,6 @@ void *scheduler_thread(void *arg) {
         // --- CHECK ACTIVE PLAYER COUNT SAFELY ---
         pthread_mutex_lock(game_mutex);
         int active_count = 0;
-        int total_joined = shared_game_state->player_count;
         for (int i = 0; i < MAX_PLAYERS; i++) {
             if (shared_game_state->active_players[i]) active_count++;
         }
@@ -1009,7 +1008,7 @@ void reset_game() {
 
 /*
  * ============================================================================
- * GAME LOGIC IMPLEMENTATION
+ * MEMBER 2: GAME LOGIC IMPLEMENTATION
  * Below are the improved game logic functions for Connect Four
  * ============================================================================
  */
