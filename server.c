@@ -1008,7 +1008,7 @@ void reset_game() {
 
 /*
  * ============================================================================
- * MEMBER 2: GAME LOGIC IMPLEMENTATION
+ * GAME LOGIC IMPLEMENTATION
  * Below are the improved game logic functions for Connect Four
  * ============================================================================
  */
@@ -1022,23 +1022,23 @@ void format_board(char *out, size_t out_size) {
     size_t remain = out_size;
     int wrote;
     
-    // Header with move count
-    wrote = snprintf(p, remain, "\n╔═══════════════════════════════╗\n");
+    // Header with move count - centered and properly aligned
+    wrote = snprintf(p, remain, "\n  ╔═══════════════════════════╗\n");
     p += wrote; remain -= (remain > wrote ? wrote : remain);
     
-    wrote = snprintf(p, remain, "║    CONNECT FOUR - MOVE %2d    ║\n", 
+    wrote = snprintf(p, remain, "  ║ CONNECT FOUR - MOVE %2d    ║\n", 
                     shared_game_state->move_count);
     p += wrote; remain -= (remain > wrote ? wrote : remain);
     
-    wrote = snprintf(p, remain, "╚═══════════════════════════════╝\n");
+    wrote = snprintf(p, remain, "  ╚═══════════════════════════╝\n");
     p += wrote; remain -= (remain > wrote ? wrote : remain);
     
-    // Column numbers header
-    wrote = snprintf(p, remain, "    0 1 2 3 4 5 6 7\n");
+    // Column numbers header - properly spaced
+    wrote = snprintf(p, remain, "    0  1  2  3  4  5  6  7\n");
     p += wrote; remain -= (remain > wrote ? wrote : remain);
     
     // Top border
-    wrote = snprintf(p, remain, "  ┌─────────────────┐\n");
+    wrote = snprintf(p, remain, "  ┌─────────────────────────┐\n");
     p += wrote; remain -= (remain > wrote ? wrote : remain);
     
     // Board rows
@@ -1049,7 +1049,7 @@ void format_board(char *out, size_t out_size) {
         for (int j = 0; j < BOARD_COLS; j++) {
             char cell = shared_game_state->board[i][j];
             
-            // Highlight the last move with brackets
+            // Highlight the last move with brackets - consistent spacing
             if (i == shared_game_state->last_move_row && 
                 j == shared_game_state->last_move_col &&
                 shared_game_state->last_move_player >= 0) {
@@ -1060,12 +1060,12 @@ void format_board(char *out, size_t out_size) {
             p += wrote; remain -= (remain > wrote ? wrote : remain);
         }
         
-        wrote = snprintf(p, remain, "│\n");
+        wrote = snprintf(p, remain, " │\n");
         p += wrote; remain -= (remain > wrote ? wrote : remain);
     }
     
     // Bottom border
-    wrote = snprintf(p, remain, "  └─────────────────┘\n");
+    wrote = snprintf(p, remain, "  └─────────────────────────┘\n");
     p += wrote; remain -= (remain > wrote ? wrote : remain);
     
     // Legend
