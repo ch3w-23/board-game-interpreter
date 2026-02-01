@@ -817,6 +817,15 @@ void *scheduler_thread(void *arg) {
             printf("WINNER: %s!\n", winner_name);
             update_score(winner_name);
 
+            // <--- ADDED: BROADCAST FINAL BOARD BEFORE GAME OVER MESSAGE --->
+            char final_board[1024];
+            format_board(final_board, sizeof(final_board));
+            for (int i = 0; i < shared_game_state->player_count; i++) {
+                send_to_client(i, final_board);
+            }
+            usleep(50000); // Ensure board arrives before Game Over text
+            // <--- END ADDED --->
+
             char win_msg[100];
             sprintf(win_msg, "GAME OVER! Winner is %s", winner_name);
 
@@ -831,6 +840,16 @@ void *scheduler_thread(void *arg) {
 
         if (check_draw()) {
             log_event("GAME_DRAW");
+            
+            // <--- ADDED: BROADCAST FINAL BOARD FOR DRAW TOO --->
+            char final_board[1024];
+            format_board(final_board, sizeof(final_board));
+            for (int i = 0; i < shared_game_state->player_count; i++) {
+                send_to_client(i, final_board);
+            }
+            usleep(50000);
+            // <--- END ADDED --->
+
             for (int i = 0; i < shared_game_state->player_count; i++)
                 send_to_client(i, "GAME OVER! It's a DRAW!");
             sleep(5);
