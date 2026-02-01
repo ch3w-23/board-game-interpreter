@@ -758,7 +758,16 @@ void *scheduler_thread(void *arg) {
         // 2) Log turn
         log_event("TURN player=%d name=%s", chosen + 1, pname);
 
-        // 3) Prompt current player
+        // 3) Send current board to the current player BEFORE prompting
+        pthread_mutex_lock(game_mutex);
+        char board_msg[1024];
+        format_board(board_msg, sizeof(board_msg));
+        pthread_mutex_unlock(game_mutex);
+        
+        send_to_client(chosen, board_msg);
+        usleep(50000); // Small delay to ensure board arrives before prompt
+
+        // 4) Prompt current player
         char prompt[128];
         pthread_mutex_lock(game_mutex);
         snprintf(prompt, sizeof(prompt), "YOUR_TURN\n%s, enter column (0-7):",
@@ -1022,12 +1031,19 @@ void format_board(char *out, size_t out_size) {
     size_t remain = out_size;
     int wrote;
     
-    // Header with move count - centered and properly aligned
+    // Header with move count - Fixed alignment
+    // The top border has 27 '=' characters.
+    // " CONNECT FOUR - MOVE " is 21 chars.
+    // "%02d" is 2 chars.
+    // We need 4 spaces at the end to equal 27.
+    
     wrote = snprintf(p, remain, "\n  ╔═══════════════════════════╗\n");
     p += wrote; remain -= (remain > wrote ? wrote : remain);
     
-    wrote = snprintf(p, remain, "  ║ CONNECT FOUR - MOVE %2d    ║\n", 
-                    shared_game_state->move_count);
+    // Changed %2d to %02d for zero-padding (e.g., "05") which looks techier, 
+    // and added exactly 4 spaces at the end to align the right border.
+    wrote = snprintf(p, remain, "  ║ CONNECT FOUR - MOVE %02d    ║\n", 
+                     shared_game_state->move_count);
     p += wrote; remain -= (remain > wrote ? wrote : remain);
     
     wrote = snprintf(p, remain, "  ╚═══════════════════════════╝\n");
