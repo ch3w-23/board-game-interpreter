@@ -8,6 +8,9 @@
 
 #define MAX_NAME_LENGTH 20
 
+// Increased buffer size to handle large board/lobby strings without splitting
+#define BUFFER_SIZE 4096 
+
 int main(int argc, char *argv[]) {
     char player_name[MAX_NAME_LENGTH];
     
@@ -109,8 +112,8 @@ int main(int argc, char *argv[]) {
         return 1;
     }
     
-// Main game loop
-    char buffer[1024]; 
+    // Main game loop
+    char buffer[BUFFER_SIZE]; 
     while (1) {
         // Clear buffer to avoid garbage data
         memset(buffer, 0, sizeof(buffer));
@@ -138,48 +141,58 @@ int main(int argc, char *argv[]) {
                 else if (strstr(current_msg, "YOUR_TURN") != NULL) {
                     char input[32];
                     
-                    printf("\nYOUR_TURN\n%s, Enter column (0-7) or type 'quit' to leave: ", player_name);
-                    fflush(stdout);
-                    
-                    // Reset input buffer
-                    memset(input, 0, sizeof(input));
-                    
-                    if (fgets(input, sizeof(input), stdin) != NULL) {
+                    // --- FIX: Input Loop (Swallows accidental Enters) ---
+                    while (1) {
+                        printf("\nYOUR_TURN\n%s, Enter column (0-7) or type 'quit' to leave: ", player_name);
+                        fflush(stdout);
+                        
+                        memset(input, 0, sizeof(input));
+                        if (fgets(input, sizeof(input), stdin) == NULL) break;
+
                         input[strcspn(input, "\n")] = 0; // Remove newline
 
-                        if (strcasecmp(input, "quit") == 0 || strcasecmp(input, "exit") == 0) {
-                            printf("Quitting game. Goodbye!\n");
-                            close(my_fd);
-                            close(server_fd);
-                            exit(0);
-                        }
+                        if (strlen(input) > 0) break; // Only accept non-empty input
+                    }
+                    // --------------------------------------------------
 
-                        char *endptr;
-                        long val = strtol(input, &endptr, 10);
-                        int col = (int)val;
+                    if (strcasecmp(input, "quit") == 0 || strcasecmp(input, "exit") == 0) {
+                        printf("Quitting game. Goodbye!\n");
+                        close(my_fd);
+                        close(server_fd);
+                        exit(0);
+                    }
 
-                        if (input[0] == '\0' || *endptr != '\0') {
-                            col = -1; 
-                        }
+                    char *endptr;
+                    long val = strtol(input, &endptr, 10);
+                    int col = (int)val;
 
-                        char move_msg[64];
-                        snprintf(move_msg, sizeof(move_msg), "PLAYER_%d_MOVE_%d", player_id + 1, col);
-                        write(server_fd, move_msg, strlen(move_msg) + 1);
-                        
-                        if (col >= 0 && col <= 7) {
-                            printf("[%s] Move sent: column %d\n", player_name, col);
-                        } else {
-                            printf("[%s] Invalid input, please try again.\n", player_name);
-                        }
+                    // Validation
+                    if (input[0] == '\0' || *endptr != '\0') {
+                        col = -1; 
+                    }
+
+                    char move_msg[64];
+                    snprintf(move_msg, sizeof(move_msg), "PLAYER_%d_MOVE_%d", player_id + 1, col);
+                    write(server_fd, move_msg, strlen(move_msg) + 1);
+                    
+                    if (col >= 0 && col <= 7) {
+                        printf("[%s] Move sent: column %d\n", player_name, col);
+                    } else {
+                        printf("[%s] Invalid input, please try again.\n", player_name);
                     }
                 }
-                // 3. Check for Game Over
+                // 3. Check for Game Over (Modified for Round 2 support)
                 else if (strstr(current_msg, "GAME OVER") != NULL || strstr(current_msg, "wins") != NULL) {
                     printf("\n[SERVER] %s\n", current_msg);
-                    printf("Game session ended.\n");
-                    close(my_fd);
-                    close(server_fd);
-                    exit(0);
+
+                    // --- FIX: Check for Fatal Shutdown vs Round End ---
+                    if (strstr(current_msg, "shutting down") != NULL || strstr(current_msg, "Not enough players") != NULL) {
+                        printf("Game session aborted by server. Exiting.\n");
+                        close(my_fd);
+                        close(server_fd);
+                        exit(0);
+                    }
+                    
                 }
                 // 4. Normal Message
                 else {
