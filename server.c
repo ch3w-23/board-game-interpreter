@@ -965,7 +965,7 @@ void *scheduler_thread(void *arg) {
             // 5. ASK TO START NEXT ROUND (Server-Side Control)
             printf("\n════════════════════════════════════════\n");
             printf(" ROUND COMPLETED. SCORES SAVED.\n");
-            // CHANGED PROMPT
+            printf(" (Note: If active players drop below %d, next round will auto-abort)\n", MIN_PLAYERS);
             printf(" Start next round? (Press ENTER to start, or type 'end' to quit): ");
             printf("\n════════════════════════════════════════\n");
             fflush(stdout);
@@ -1046,6 +1046,7 @@ void *scheduler_thread(void *arg) {
             // 5. ASK ADMIN TO START NEXT ROUND
             printf("\n════════════════════════════════════════\n");
             printf(" GAME DRAWN. NO SCORES CHANGED.\n");
+            printf(" (Note: If active players drop below %d, next round will auto-abort)\n", MIN_PLAYERS);
             printf(" Start next round? (Press ENTER to start, or type 'end' to quit): ");
             printf("\n════════════════════════════════════════\n");
             fflush(stdout);

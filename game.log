@@ -504,3 +504,183 @@
 2026-02-06 02:37:00 | LEAVE player=1 name=A pid=8277
 2026-02-06 02:37:00 | LEAVE player=2 name=B pid=8281
 2026-02-06 02:37:00 | LEAVE player=3 name=C pid=8283
+2026-02-06 17:04:35 | JOIN player=1 name=A pid=508
+2026-02-06 17:04:39 | JOIN player=2 name=B pid=510
+2026-02-06 17:04:43 | JOIN player=3 name=C pid=512
+2026-02-06 17:04:58 | JOIN player=4 name=D pid=514
+2026-02-06 17:05:23 | GAME_START round=1 players=4
+2026-02-06 17:05:23 | TURN player=1 name=A
+2026-02-06 17:05:31 | LEAVE player=1 name=A pid=508
+2026-02-06 17:05:31 | TURN player=2 name=B
+2026-02-06 17:06:45 | LEAVE player=2 name=B pid=510
+2026-02-06 17:06:45 | LEAVE player=4 name=D pid=514
+2026-02-06 17:07:46 | JOIN player=1 name=A pid=1886
+2026-02-06 17:07:50 | JOIN player=2 name=B pid=1888
+2026-02-06 17:07:53 | JOIN player=3 name=C pid=1890
+2026-02-06 17:08:01 | JOIN player=4 name=D pid=1892
+2026-02-06 17:08:21 | JOIN player=5 name=E pid=1913
+2026-02-06 17:08:21 | GAME_START round=1 players=5
+2026-02-06 17:08:21 | TURN player=1 name=A
+2026-02-06 17:08:27 | MOVE player=1 name=A col=7 row=7
+2026-02-06 17:08:27 | TURN player=2 name=B
+2026-02-06 17:08:36 | MOVE player=2 name=B col=6 row=7
+2026-02-06 17:08:36 | TURN player=3 name=C
+2026-02-06 17:08:38 | MOVE player=3 name=C col=5 row=7
+2026-02-06 17:08:38 | TURN player=4 name=D
+2026-02-06 17:08:40 | MOVE player=4 name=D col=4 row=7
+2026-02-06 17:08:40 | TURN player=5 name=E
+2026-02-06 17:08:42 | MOVE player=5 name=E col=3 row=7
+2026-02-06 17:08:42 | TURN player=1 name=A
+2026-02-06 17:08:48 | LEAVE player=1 name=A pid=1886
+2026-02-06 17:08:48 | TURN player=2 name=B
+2026-02-06 17:09:06 | MOVE player=2 name=B col=7 row=6
+2026-02-06 17:09:06 | TURN player=3 name=C
+2026-02-06 17:09:10 | MOVE player=3 name=C col=6 row=6
+2026-02-06 17:09:10 | TURN player=4 name=D
+2026-02-06 17:09:12 | MOVE player=4 name=D col=5 row=6
+2026-02-06 17:09:12 | TURN player=5 name=E
+2026-02-06 17:09:16 | MOVE player=5 name=E col=4 row=6
+2026-02-06 17:09:16 | TURN player=2 name=B
+2026-02-06 17:09:24 | LEAVE player=2 name=B pid=1888
+2026-02-06 17:09:24 | TURN player=3 name=C
+2026-02-06 17:09:27 | LEAVE player=3 name=C pid=1890
+2026-02-06 17:09:27 | LEAVE player=5 name=E pid=1913
+2026-02-06 17:09:27 | LEAVE player=4 name=D pid=1892
+2026-02-06 20:23:35 | JOIN player=1 name=A pid=467
+2026-02-06 20:23:38 | JOIN player=2 name=B pid=469
+2026-02-06 20:23:44 | JOIN player=3 name=C pid=471
+2026-02-06 20:23:47 | GAME_START round=1 players=3
+2026-02-06 20:23:47 | TURN player=1 name=A
+2026-02-06 20:23:55 | MOVE player=1 name=A col=7 row=7
+2026-02-06 20:23:55 | TURN player=2 name=B
+2026-02-06 20:23:58 | MOVE player=2 name=B col=6 row=7
+2026-02-06 20:23:58 | TURN player=3 name=C
+2026-02-06 20:24:00 | MOVE player=3 name=C col=6 row=6
+2026-02-06 20:24:00 | TURN player=1 name=A
+2026-02-06 20:24:02 | MOVE player=1 name=A col=7 row=6
+2026-02-06 20:24:02 | TURN player=2 name=B
+2026-02-06 20:24:04 | MOVE player=2 name=B col=6 row=5
+2026-02-06 20:24:04 | TURN player=3 name=C
+2026-02-06 20:24:07 | MOVE player=3 name=C col=6 row=4
+2026-02-06 20:24:07 | TURN player=1 name=A
+2026-02-06 20:24:10 | MOVE player=1 name=A col=7 row=5
+2026-02-06 20:24:10 | TURN player=2 name=B
+2026-02-06 20:24:11 | MOVE player=2 name=B col=6 row=3
+2026-02-06 20:24:11 | TURN player=3 name=C
+2026-02-06 20:24:13 | MOVE player=3 name=C col=6 row=2
+2026-02-06 20:24:13 | TURN player=1 name=A
+2026-02-06 20:24:14 | MOVE player=1 name=A col=7 row=4
+2026-02-06 20:24:33 | LEAVE player=1 name=A pid=467
+2026-02-06 20:24:44 | ROUND_START round=2
+2026-02-06 20:24:44 | GAME_RESET
+2026-02-06 20:24:44 | LEAVE player=2 name=B pid=469
+2026-02-06 20:24:44 | LEAVE player=3 name=C pid=471
+2026-02-06 20:56:46 | JOIN player=1 name=A pid=486
+2026-02-06 20:56:50 | JOIN player=2 name=B pid=488
+2026-02-06 20:56:54 | JOIN player=3 name=C pid=490
+2026-02-06 20:56:59 | GAME_START round=1 players=3
+2026-02-06 20:56:59 | TURN player=1 name=A
+2026-02-06 20:57:01 | MOVE player=1 name=A col=7 row=7
+2026-02-06 20:57:01 | TURN player=2 name=B
+2026-02-06 20:57:03 | MOVE player=2 name=B col=6 row=7
+2026-02-06 20:57:03 | TURN player=3 name=C
+2026-02-06 20:57:04 | MOVE player=3 name=C col=6 row=6
+2026-02-06 20:57:04 | TURN player=1 name=A
+2026-02-06 20:57:06 | MOVE player=1 name=A col=7 row=6
+2026-02-06 20:57:06 | TURN player=2 name=B
+2026-02-06 20:57:08 | MOVE player=2 name=B col=6 row=5
+2026-02-06 20:57:08 | TURN player=3 name=C
+2026-02-06 20:57:11 | MOVE player=3 name=C col=6 row=4
+2026-02-06 20:57:11 | TURN player=1 name=A
+2026-02-06 20:57:12 | MOVE player=1 name=A col=7 row=5
+2026-02-06 20:57:12 | TURN player=2 name=B
+2026-02-06 20:57:13 | MOVE player=2 name=B col=6 row=3
+2026-02-06 20:57:13 | TURN player=3 name=C
+2026-02-06 20:57:15 | MOVE player=3 name=C col=6 row=2
+2026-02-06 20:57:15 | TURN player=1 name=A
+2026-02-06 20:57:17 | MOVE player=1 name=A col=7 row=4
+2026-02-06 20:57:50 | LEAVE player=1 name=A pid=486
+2026-02-06 20:59:26 | LEAVE player=2 name=B pid=488
+2026-02-06 21:06:57 | JOIN player=1 name=A pid=515
+2026-02-06 21:06:59 | JOIN player=2 name=B pid=517
+2026-02-06 21:07:01 | JOIN player=3 name=C pid=519
+2026-02-06 21:07:05 | GAME_START round=1 players=3
+2026-02-06 21:07:05 | TURN player=1 name=A
+2026-02-06 21:07:09 | MOVE player=1 name=A col=7 row=7
+2026-02-06 21:07:09 | TURN player=2 name=B
+2026-02-06 21:07:12 | MOVE player=2 name=B col=7 row=6
+2026-02-06 21:07:12 | TURN player=3 name=C
+2026-02-06 21:07:16 | MOVE player=3 name=C col=6 row=7
+2026-02-06 21:07:16 | TURN player=1 name=A
+2026-02-06 21:07:23 | MOVE player=1 name=A col=5 row=7
+2026-02-06 21:07:23 | TURN player=2 name=B
+2026-02-06 21:07:25 | MOVE player=2 name=B col=7 row=5
+2026-02-06 21:07:25 | TURN player=3 name=C
+2026-02-06 21:07:28 | MOVE player=3 name=C col=7 row=4
+2026-02-06 21:07:28 | TURN player=1 name=A
+2026-02-06 21:07:31 | MOVE player=1 name=A col=5 row=6
+2026-02-06 21:07:31 | TURN player=2 name=B
+2026-02-06 21:07:33 | MOVE player=2 name=B col=6 row=6
+2026-02-06 21:07:33 | TURN player=3 name=C
+2026-02-06 21:07:35 | MOVE player=3 name=C col=6 row=5
+2026-02-06 21:07:35 | TURN player=1 name=A
+2026-02-06 21:07:36 | MOVE player=1 name=A col=5 row=5
+2026-02-06 21:07:36 | TURN player=2 name=B
+2026-02-06 21:07:38 | MOVE player=2 name=B col=6 row=4
+2026-02-06 21:07:38 | TURN player=3 name=C
+2026-02-06 21:07:39 | MOVE player=3 name=C col=7 row=3
+2026-02-06 21:07:39 | TURN player=1 name=A
+2026-02-06 21:07:42 | MOVE player=1 name=A col=5 row=4
+2026-02-06 21:11:01 | JOIN player=1 name=A pid=540
+2026-02-06 21:11:03 | JOIN player=2 name=B pid=542
+2026-02-06 21:11:07 | JOIN player=3 name=C pid=564
+2026-02-06 21:11:09 | GAME_START round=1 players=3
+2026-02-06 21:11:09 | TURN player=1 name=A
+2026-02-06 21:25:18 | MOVE player=1 name=A col=7 row=7
+2026-02-06 21:25:18 | TURN player=2 name=B
+2026-02-06 21:25:23 | MOVE player=2 name=B col=6 row=7
+2026-02-06 21:25:23 | TURN player=3 name=C
+2026-02-06 21:25:25 | MOVE player=3 name=C col=6 row=6
+2026-02-06 21:25:25 | TURN player=1 name=A
+2026-02-06 21:25:25 | MOVE player=1 name=A col=7 row=6
+2026-02-06 21:25:25 | TURN player=2 name=B
+2026-02-06 21:25:38 | MOVE player=2 name=B col=6 row=5
+2026-02-06 21:25:38 | TURN player=3 name=C
+2026-02-06 21:25:43 | MOVE player=3 name=C col=6 row=4
+2026-02-06 21:25:43 | TURN player=1 name=A
+2026-02-06 21:25:43 | MOVE player=1 name=A col=7 row=5
+2026-02-06 21:25:43 | TURN player=2 name=B
+2026-02-06 21:25:43 | MOVE player=2 name=B col=6 row=3
+2026-02-06 21:25:43 | TURN player=3 name=C
+2026-02-06 21:25:43 | MOVE player=3 name=C col=6 row=2
+2026-02-06 21:25:43 | TURN player=1 name=A
+2026-02-06 21:25:49 | MOVE player=1 name=A col=7 row=4
+2026-02-06 21:26:54 | LEAVE player=1 name=A pid=540
+2026-02-06 21:27:12 | ROUND_START round=2
+2026-02-06 21:27:12 | GAME_RESET
+2026-02-06 21:27:12 | LEAVE player=2 name=B pid=542
+2026-02-06 21:27:12 | LEAVE player=3 name=C pid=564
+2026-02-06 21:30:30 | JOIN player=1 name=A pid=625
+2026-02-06 21:30:32 | JOIN player=2 name=B pid=627
+2026-02-06 21:30:33 | JOIN player=3 name=C pid=629
+2026-02-06 21:30:35 | GAME_START round=1 players=3
+2026-02-06 21:30:35 | TURN player=1 name=A
+2026-02-06 21:30:38 | MOVE player=1 name=A col=7 row=7
+2026-02-06 21:30:38 | TURN player=2 name=B
+2026-02-06 21:30:42 | MOVE player=2 name=B col=6 row=7
+2026-02-06 21:30:42 | TURN player=3 name=C
+2026-02-06 21:30:48 | MOVE player=3 name=C col=6 row=6
+2026-02-06 21:30:48 | TURN player=1 name=A
+2026-02-06 21:30:48 | MOVE player=1 name=A col=7 row=6
+2026-02-06 21:30:48 | TURN player=2 name=B
+2026-02-06 21:30:48 | MOVE player=2 name=B col=6 row=5
+2026-02-06 21:30:48 | TURN player=3 name=C
+2026-02-06 21:30:50 | MOVE player=3 name=C col=6 row=4
+2026-02-06 21:30:50 | TURN player=1 name=A
+2026-02-06 21:30:50 | MOVE player=1 name=A col=7 row=5
+2026-02-06 21:30:50 | TURN player=2 name=B
+2026-02-06 21:30:50 | MOVE player=2 name=B col=6 row=3
+2026-02-06 21:30:50 | TURN player=3 name=C
+2026-02-06 21:30:50 | MOVE player=3 name=C col=6 row=2
+2026-02-06 21:30:50 | TURN player=1 name=A
+2026-02-06 21:30:50 | MOVE player=1 name=A col=7 row=4
