@@ -684,3 +684,662 @@
 2026-02-06 21:30:50 | MOVE player=3 name=C col=6 row=2
 2026-02-06 21:30:50 | TURN player=1 name=A
 2026-02-06 21:30:50 | MOVE player=1 name=A col=7 row=4
+2026-02-07 02:11:20 | LEAVE player=1 name=A pid=625
+2026-02-07 02:11:20 | ROUND_START round=2
+2026-02-07 14:30:44 | JOIN player=1 name=A pid=569
+2026-02-07 14:30:49 | JOIN player=2 name=B pid=571
+2026-02-07 14:30:54 | JOIN player=3 name=C pid=575
+2026-02-07 14:30:56 | GAME_START round=1 players=3
+2026-02-07 14:30:56 | TURN player=1 name=A
+2026-02-07 14:31:07 | MOVE player=1 name=A col=7 row=7
+2026-02-07 14:31:07 | TURN player=2 name=B
+2026-02-07 14:31:10 | MOVE player=2 name=B col=7 row=6
+2026-02-07 14:31:10 | TURN player=3 name=C
+2026-02-07 14:31:12 | MOVE player=3 name=C col=7 row=5
+2026-02-07 14:31:12 | TURN player=1 name=A
+2026-02-07 14:31:16 | MOVE player=1 name=A col=7 row=4
+2026-02-07 14:31:16 | TURN player=2 name=B
+2026-02-07 14:31:18 | MOVE player=2 name=B col=7 row=3
+2026-02-07 14:31:18 | TURN player=3 name=C
+2026-02-07 14:31:19 | MOVE player=3 name=C col=7 row=2
+2026-02-07 14:31:19 | TURN player=1 name=A
+2026-02-07 14:31:21 | MOVE player=1 name=A col=7 row=1
+2026-02-07 14:31:21 | TURN player=2 name=B
+2026-02-07 14:31:23 | MOVE player=2 name=B col=7 row=0
+2026-02-07 14:31:23 | TURN player=3 name=C
+2026-02-07 14:31:36 | MOVE player=3 name=C col=6 row=7
+2026-02-07 14:31:36 | TURN player=1 name=A
+2026-02-07 14:31:43 | MOVE player=1 name=A col=5 row=7
+2026-02-07 14:31:43 | TURN player=2 name=B
+2026-02-07 14:31:46 | MOVE player=2 name=B col=4 row=7
+2026-02-07 14:31:46 | TURN player=3 name=C
+2026-02-07 14:31:48 | MOVE player=3 name=C col=6 row=6
+2026-02-07 14:31:48 | TURN player=1 name=A
+2026-02-07 14:31:51 | MOVE player=1 name=A col=5 row=6
+2026-02-07 14:31:51 | TURN player=2 name=B
+2026-02-07 14:31:53 | MOVE player=2 name=B col=4 row=6
+2026-02-07 14:31:53 | TURN player=3 name=C
+2026-02-07 14:31:55 | MOVE player=3 name=C col=6 row=5
+2026-02-07 14:31:55 | TURN player=1 name=A
+2026-02-07 14:31:58 | MOVE player=1 name=A col=3 row=7
+2026-02-07 14:31:58 | TURN player=2 name=B
+2026-02-07 14:32:02 | MOVE player=2 name=B col=4 row=5
+2026-02-07 14:32:02 | TURN player=3 name=C
+2026-02-07 14:32:07 | MOVE player=3 name=C col=6 row=4
+2026-02-07 14:43:04 | ROUND_START round=2
+2026-02-07 14:43:04 | GAME_RESET
+2026-02-07 14:43:04 | TURN player=1 name=A
+2026-02-07 14:43:38 | MOVE player=1 name=A col=7 row=7
+2026-02-07 14:43:38 | TURN player=2 name=B
+2026-02-07 14:43:42 | MOVE player=2 name=B col=7 row=6
+2026-02-07 14:43:42 | TURN player=3 name=C
+2026-02-07 14:43:43 | MOVE player=3 name=C col=7 row=5
+2026-02-07 14:43:43 | TURN player=1 name=A
+2026-02-07 14:43:45 | MOVE player=1 name=A col=7 row=4
+2026-02-07 14:43:45 | TURN player=2 name=B
+2026-02-07 14:43:46 | MOVE player=2 name=B col=7 row=3
+2026-02-07 14:43:46 | TURN player=3 name=C
+2026-02-07 14:43:48 | MOVE player=3 name=C col=7 row=2
+2026-02-07 14:43:48 | TURN player=1 name=A
+2026-02-07 14:43:49 | MOVE player=1 name=A col=7 row=1
+2026-02-07 14:43:49 | TURN player=2 name=B
+2026-02-07 14:43:51 | MOVE player=2 name=B col=7 row=0
+2026-02-07 14:43:51 | TURN player=3 name=C
+2026-02-07 14:43:53 | MOVE player=3 name=C col=6 row=7
+2026-02-07 14:43:53 | TURN player=1 name=A
+2026-02-07 14:43:54 | MOVE player=1 name=A col=6 row=6
+2026-02-07 14:43:54 | TURN player=2 name=B
+2026-02-07 14:43:55 | MOVE player=2 name=B col=6 row=5
+2026-02-07 14:43:55 | TURN player=3 name=C
+2026-02-07 14:43:57 | MOVE player=3 name=C col=6 row=4
+2026-02-07 14:43:57 | TURN player=1 name=A
+2026-02-07 14:43:58 | MOVE player=1 name=A col=6 row=3
+2026-02-07 14:43:58 | TURN player=2 name=B
+2026-02-07 14:43:59 | MOVE player=2 name=B col=6 row=2
+2026-02-07 14:43:59 | TURN player=3 name=C
+2026-02-07 14:44:01 | MOVE player=3 name=C col=6 row=1
+2026-02-07 14:44:01 | TURN player=1 name=A
+2026-02-07 14:44:03 | MOVE player=1 name=A col=6 row=0
+2026-02-07 14:44:03 | TURN player=2 name=B
+2026-02-07 14:44:05 | MOVE player=2 name=B col=5 row=7
+2026-02-07 14:44:05 | TURN player=3 name=C
+2026-02-07 14:44:06 | MOVE player=3 name=C col=5 row=6
+2026-02-07 14:44:06 | TURN player=1 name=A
+2026-02-07 14:44:08 | MOVE player=1 name=A col=5 row=5
+2026-02-07 14:44:08 | TURN player=2 name=B
+2026-02-07 14:44:09 | MOVE player=2 name=B col=5 row=4
+2026-02-07 14:44:09 | TURN player=3 name=C
+2026-02-07 14:44:11 | MOVE player=3 name=C col=5 row=3
+2026-02-07 14:44:11 | TURN player=1 name=A
+2026-02-07 14:44:27 | MOVE player=1 name=A col=5 row=2
+2026-02-07 14:44:27 | TURN player=2 name=B
+2026-02-07 14:44:27 | MOVE player=2 name=B col=5 row=1
+2026-02-07 14:44:27 | TURN player=3 name=C
+2026-02-07 14:47:15 | LEAVE player=3 name=C pid=575
+2026-02-07 14:47:15 | LEAVE player=2 name=B pid=571
+2026-02-07 14:47:15 | LEAVE player=1 name=A pid=569
+2026-02-07 14:47:33 | JOIN player=1 name=A pid=1373
+2026-02-07 14:47:36 | JOIN player=2 name=B pid=1377
+2026-02-07 14:47:40 | JOIN player=3 name=C pid=1381
+2026-02-07 14:47:52 | GAME_START round=1 players=3
+2026-02-07 14:47:52 | TURN player=1 name=A
+2026-02-07 14:47:56 | MOVE player=1 name=A col=1 row=7
+2026-02-07 14:47:56 | TURN player=2 name=B
+2026-02-07 14:47:58 | MOVE player=2 name=B col=2 row=7
+2026-02-07 14:47:58 | TURN player=3 name=C
+2026-02-07 14:47:59 | MOVE player=3 name=C col=3 row=7
+2026-02-07 14:47:59 | TURN player=1 name=A
+2026-02-07 14:48:02 | MOVE player=1 name=A col=4 row=7
+2026-02-07 14:48:02 | TURN player=2 name=B
+2026-02-07 14:48:04 | MOVE player=2 name=B col=5 row=7
+2026-02-07 14:48:04 | TURN player=3 name=C
+2026-02-07 14:48:05 | MOVE player=3 name=C col=6 row=7
+2026-02-07 14:48:05 | TURN player=1 name=A
+2026-02-07 14:48:07 | MOVE player=1 name=A col=7 row=7
+2026-02-07 14:48:07 | TURN player=2 name=B
+2026-02-07 14:48:10 | MOVE player=2 name=B col=0 row=7
+2026-02-07 14:48:10 | TURN player=3 name=C
+2026-02-07 14:48:12 | MOVE player=3 name=C col=0 row=6
+2026-02-07 14:48:12 | TURN player=1 name=A
+2026-02-07 14:48:14 | MOVE player=1 name=A col=1 row=6
+2026-02-07 14:48:14 | TURN player=2 name=B
+2026-02-07 14:48:15 | MOVE player=2 name=B col=2 row=6
+2026-02-07 14:48:15 | TURN player=3 name=C
+2026-02-07 14:48:17 | MOVE player=3 name=C col=3 row=6
+2026-02-07 14:48:17 | TURN player=1 name=A
+2026-02-07 14:48:18 | MOVE player=1 name=A col=4 row=6
+2026-02-07 14:48:18 | TURN player=2 name=B
+2026-02-07 14:48:21 | MOVE player=2 name=B col=5 row=6
+2026-02-07 14:48:21 | TURN player=3 name=C
+2026-02-07 14:48:23 | MOVE player=3 name=C col=6 row=6
+2026-02-07 14:48:23 | TURN player=1 name=A
+2026-02-07 14:48:25 | MOVE player=1 name=A col=7 row=6
+2026-02-07 14:48:25 | TURN player=2 name=B
+2026-02-07 14:48:29 | MOVE player=2 name=B col=0 row=5
+2026-02-07 14:48:29 | TURN player=3 name=C
+2026-02-07 14:48:32 | MOVE player=3 name=C col=1 row=5
+2026-02-07 14:48:32 | TURN player=1 name=A
+2026-02-07 14:48:33 | MOVE player=1 name=A col=2 row=5
+2026-02-07 14:48:33 | TURN player=2 name=B
+2026-02-07 14:48:35 | MOVE player=2 name=B col=3 row=5
+2026-02-07 14:48:35 | TURN player=3 name=C
+2026-02-07 14:48:36 | MOVE player=3 name=C col=4 row=5
+2026-02-07 14:48:36 | TURN player=1 name=A
+2026-02-07 14:48:39 | MOVE player=1 name=A col=5 row=5
+2026-02-07 14:48:39 | TURN player=2 name=B
+2026-02-07 14:48:41 | MOVE player=2 name=B col=6 row=5
+2026-02-07 14:48:41 | TURN player=3 name=C
+2026-02-07 14:48:42 | MOVE player=3 name=C col=7 row=5
+2026-02-07 14:48:42 | TURN player=1 name=A
+2026-02-07 14:48:48 | MOVE player=1 name=A col=7 row=4
+2026-02-07 14:48:48 | TURN player=2 name=B
+2026-02-07 14:48:50 | MOVE player=2 name=B col=6 row=4
+2026-02-07 14:48:50 | TURN player=3 name=C
+2026-02-07 14:48:52 | MOVE player=3 name=C col=5 row=4
+2026-02-07 14:48:52 | TURN player=1 name=A
+2026-02-07 14:48:54 | MOVE player=1 name=A col=4 row=4
+2026-02-07 14:48:54 | TURN player=2 name=B
+2026-02-07 14:48:56 | MOVE player=2 name=B col=3 row=4
+2026-02-07 14:48:56 | TURN player=3 name=C
+2026-02-07 14:48:58 | MOVE player=3 name=C col=2 row=4
+2026-02-07 14:48:58 | TURN player=1 name=A
+2026-02-07 14:49:00 | MOVE player=1 name=A col=1 row=4
+2026-02-07 14:49:00 | TURN player=2 name=B
+2026-02-07 14:49:01 | MOVE player=2 name=B col=0 row=4
+2026-02-07 14:49:01 | TURN player=3 name=C
+2026-02-07 14:49:05 | MOVE player=3 name=C col=7 row=3
+2026-02-07 14:49:05 | TURN player=1 name=A
+2026-02-07 14:49:13 | MOVE player=1 name=A col=6 row=3
+2026-02-07 14:49:13 | TURN player=2 name=B
+2026-02-07 14:49:15 | MOVE player=2 name=B col=5 row=3
+2026-02-07 14:49:15 | TURN player=3 name=C
+2026-02-07 14:49:17 | MOVE player=3 name=C col=4 row=3
+2026-02-07 14:49:17 | TURN player=1 name=A
+2026-02-07 14:49:20 | MOVE player=1 name=A col=3 row=3
+2026-02-07 14:49:20 | TURN player=2 name=B
+2026-02-07 14:49:22 | MOVE player=2 name=B col=2 row=3
+2026-02-07 14:49:22 | TURN player=3 name=C
+2026-02-07 14:49:24 | MOVE player=3 name=C col=1 row=3
+2026-02-07 14:49:24 | TURN player=1 name=A
+2026-02-07 14:49:27 | MOVE player=1 name=A col=0 row=3
+2026-02-07 14:49:27 | TURN player=2 name=B
+2026-02-07 14:49:32 | MOVE player=2 name=B col=1 row=2
+2026-02-07 14:49:32 | TURN player=3 name=C
+2026-02-07 14:49:36 | MOVE player=3 name=C col=2 row=2
+2026-02-07 14:49:36 | TURN player=1 name=A
+2026-02-07 14:49:38 | MOVE player=1 name=A col=3 row=2
+2026-02-07 14:49:38 | TURN player=2 name=B
+2026-02-07 14:49:40 | MOVE player=2 name=B col=4 row=2
+2026-02-07 14:49:40 | TURN player=3 name=C
+2026-02-07 14:49:41 | MOVE player=3 name=C col=5 row=2
+2026-02-07 14:49:41 | TURN player=1 name=A
+2026-02-07 14:49:43 | MOVE player=1 name=A col=6 row=2
+2026-02-07 14:49:43 | TURN player=2 name=B
+2026-02-07 14:49:44 | MOVE player=2 name=B col=7 row=2
+2026-02-07 14:49:44 | TURN player=3 name=C
+2026-02-07 14:49:46 | MOVE player=3 name=C col=0 row=2
+2026-02-07 14:49:46 | TURN player=1 name=A
+2026-02-07 14:49:50 | MOVE player=1 name=A col=7 row=1
+2026-02-07 14:49:50 | TURN player=2 name=B
+2026-02-07 14:49:52 | MOVE player=2 name=B col=6 row=1
+2026-02-07 14:49:52 | TURN player=3 name=C
+2026-02-07 14:49:54 | MOVE player=3 name=C col=5 row=1
+2026-02-07 14:49:54 | TURN player=1 name=A
+2026-02-07 14:49:56 | MOVE player=1 name=A col=4 row=1
+2026-02-07 14:49:56 | TURN player=2 name=B
+2026-02-07 14:49:59 | MOVE player=2 name=B col=3 row=1
+2026-02-07 14:55:39 | ROUND_START round=2
+2026-02-07 14:55:39 | GAME_RESET
+2026-02-07 14:55:39 | TURN player=3 name=C
+2026-02-07 14:55:46 | MOVE player=3 name=C col=0 row=7
+2026-02-07 14:55:46 | TURN player=1 name=A
+2026-02-07 14:55:50 | MOVE player=1 name=A col=0 row=6
+2026-02-07 14:55:50 | TURN player=2 name=B
+2026-02-07 14:55:53 | MOVE player=2 name=B col=0 row=5
+2026-02-07 14:55:53 | TURN player=3 name=C
+2026-02-07 14:55:54 | MOVE player=3 name=C col=0 row=4
+2026-02-07 14:55:54 | TURN player=1 name=A
+2026-02-07 14:55:56 | MOVE player=1 name=A col=0 row=3
+2026-02-07 14:55:56 | TURN player=2 name=B
+2026-02-07 14:55:58 | MOVE player=2 name=B col=0 row=2
+2026-02-07 14:55:58 | TURN player=3 name=C
+2026-02-07 14:55:59 | MOVE player=3 name=C col=0 row=1
+2026-02-07 14:55:59 | TURN player=1 name=A
+2026-02-07 14:56:01 | MOVE player=1 name=A col=0 row=0
+2026-02-07 14:56:01 | TURN player=2 name=B
+2026-02-07 14:56:05 | MOVE player=2 name=B col=1 row=7
+2026-02-07 14:56:05 | TURN player=3 name=C
+2026-02-07 14:56:07 | MOVE player=3 name=C col=1 row=6
+2026-02-07 14:56:07 | TURN player=1 name=A
+2026-02-07 14:56:08 | MOVE player=1 name=A col=1 row=5
+2026-02-07 14:56:08 | TURN player=2 name=B
+2026-02-07 14:56:10 | MOVE player=2 name=B col=1 row=4
+2026-02-07 14:56:10 | TURN player=3 name=C
+2026-02-07 14:56:11 | MOVE player=3 name=C col=1 row=3
+2026-02-07 14:56:11 | TURN player=1 name=A
+2026-02-07 14:56:12 | MOVE player=1 name=A col=1 row=2
+2026-02-07 14:56:12 | TURN player=2 name=B
+2026-02-07 14:56:14 | MOVE player=2 name=B col=1 row=1
+2026-02-07 14:56:14 | TURN player=3 name=C
+2026-02-07 14:56:15 | MOVE player=3 name=C col=1 row=0
+2026-02-07 14:56:15 | TURN player=1 name=A
+2026-02-07 14:56:18 | MOVE player=1 name=A col=7 row=7
+2026-02-07 14:56:18 | TURN player=2 name=B
+2026-02-07 14:56:19 | MOVE player=2 name=B col=7 row=6
+2026-02-07 14:56:19 | TURN player=3 name=C
+2026-02-07 14:56:21 | MOVE player=3 name=C col=7 row=5
+2026-02-07 14:56:21 | TURN player=1 name=A
+2026-02-07 14:56:22 | MOVE player=1 name=A col=7 row=4
+2026-02-07 14:56:22 | TURN player=2 name=B
+2026-02-07 14:56:24 | MOVE player=2 name=B col=7 row=3
+2026-02-07 14:56:24 | TURN player=3 name=C
+2026-02-07 14:56:27 | MOVE player=3 name=C col=7 row=2
+2026-02-07 14:56:27 | TURN player=1 name=A
+2026-02-07 14:56:29 | MOVE player=1 name=A col=7 row=1
+2026-02-07 14:56:29 | TURN player=2 name=B
+2026-02-07 14:56:30 | MOVE player=2 name=B col=7 row=0
+2026-02-07 14:56:30 | TURN player=3 name=C
+2026-02-07 14:56:32 | MOVE player=3 name=C col=6 row=7
+2026-02-07 14:56:32 | TURN player=1 name=A
+2026-02-07 14:56:34 | MOVE player=1 name=A col=6 row=6
+2026-02-07 14:56:34 | TURN player=2 name=B
+2026-02-07 14:56:36 | MOVE player=2 name=B col=6 row=5
+2026-02-07 14:56:36 | TURN player=3 name=C
+2026-02-07 14:56:37 | MOVE player=3 name=C col=6 row=4
+2026-02-07 14:56:37 | TURN player=1 name=A
+2026-02-07 14:56:39 | MOVE player=1 name=A col=6 row=3
+2026-02-07 14:56:39 | TURN player=2 name=B
+2026-02-07 14:56:41 | MOVE player=2 name=B col=6 row=2
+2026-02-07 14:56:41 | TURN player=3 name=C
+2026-02-07 14:56:42 | MOVE player=3 name=C col=6 row=1
+2026-02-07 14:56:42 | TURN player=1 name=A
+2026-02-07 14:56:44 | MOVE player=1 name=A col=6 row=0
+2026-02-07 14:56:44 | TURN player=2 name=B
+2026-02-07 14:56:47 | MOVE player=2 name=B col=3 row=7
+2026-02-07 14:56:47 | TURN player=3 name=C
+2026-02-07 14:56:49 | MOVE player=3 name=C col=3 row=6
+2026-02-07 14:56:49 | TURN player=1 name=A
+2026-02-07 14:56:51 | MOVE player=1 name=A col=3 row=5
+2026-02-07 14:56:51 | TURN player=2 name=B
+2026-02-07 14:56:56 | MOVE player=2 name=B col=3 row=4
+2026-02-07 14:56:56 | TURN player=3 name=C
+2026-02-07 14:56:58 | MOVE player=3 name=C col=3 row=3
+2026-02-07 14:56:58 | TURN player=1 name=A
+2026-02-07 14:57:00 | MOVE player=1 name=A col=3 row=2
+2026-02-07 14:57:00 | TURN player=2 name=B
+2026-02-07 14:57:02 | MOVE player=2 name=B col=3 row=1
+2026-02-07 14:57:02 | TURN player=3 name=C
+2026-02-07 14:57:03 | MOVE player=3 name=C col=3 row=0
+2026-02-07 14:57:03 | TURN player=1 name=A
+2026-02-07 14:57:06 | MOVE player=1 name=A col=5 row=7
+2026-02-07 14:57:06 | TURN player=2 name=B
+2026-02-07 14:57:09 | MOVE player=2 name=B col=5 row=6
+2026-02-07 14:57:09 | TURN player=3 name=C
+2026-02-07 14:57:10 | MOVE player=3 name=C col=5 row=5
+2026-02-07 14:57:10 | TURN player=1 name=A
+2026-02-07 14:57:12 | MOVE player=1 name=A col=5 row=4
+2026-02-07 14:57:12 | TURN player=2 name=B
+2026-02-07 14:57:14 | MOVE player=2 name=B col=5 row=3
+2026-02-07 14:57:14 | TURN player=3 name=C
+2026-02-07 14:57:16 | MOVE player=3 name=C col=5 row=2
+2026-02-07 14:57:16 | TURN player=1 name=A
+2026-02-07 14:57:18 | MOVE player=1 name=A col=5 row=1
+2026-02-07 14:57:18 | TURN player=2 name=B
+2026-02-07 14:57:20 | MOVE player=2 name=B col=5 row=0
+2026-02-07 14:57:20 | TURN player=3 name=C
+2026-02-07 14:57:23 | MOVE player=3 name=C col=4 row=7
+2026-02-07 14:57:23 | TURN player=1 name=A
+2026-02-07 14:57:25 | MOVE player=1 name=A col=4 row=6
+2026-02-07 14:57:25 | TURN player=2 name=B
+2026-02-07 14:57:27 | MOVE player=2 name=B col=4 row=5
+2026-02-07 14:57:27 | TURN player=3 name=C
+2026-02-07 14:57:28 | MOVE player=3 name=C col=4 row=4
+2026-02-07 14:57:28 | TURN player=1 name=A
+2026-02-07 14:57:30 | MOVE player=1 name=A col=4 row=3
+2026-02-07 14:57:30 | TURN player=2 name=B
+2026-02-07 14:57:31 | MOVE player=2 name=B col=4 row=2
+2026-02-07 14:57:31 | TURN player=3 name=C
+2026-02-07 14:57:33 | MOVE player=3 name=C col=4 row=1
+2026-02-07 14:57:33 | TURN player=1 name=A
+2026-02-07 14:57:35 | MOVE player=1 name=A col=4 row=0
+2026-02-07 14:57:35 | TURN player=2 name=B
+2026-02-07 14:57:37 | MOVE player=2 name=B col=2 row=7
+2026-02-07 14:57:37 | TURN player=3 name=C
+2026-02-07 14:57:40 | MOVE player=3 name=C col=2 row=6
+2026-02-07 14:57:40 | TURN player=1 name=A
+2026-02-07 14:57:41 | MOVE player=1 name=A col=2 row=5
+2026-02-07 14:57:41 | TURN player=2 name=B
+2026-02-07 14:57:43 | MOVE player=2 name=B col=2 row=4
+2026-02-07 14:57:43 | TURN player=3 name=C
+2026-02-07 14:57:44 | MOVE player=3 name=C col=2 row=3
+2026-02-07 14:57:44 | TURN player=1 name=A
+2026-02-07 14:57:46 | MOVE player=1 name=A col=2 row=2
+2026-02-07 14:57:46 | TURN player=2 name=B
+2026-02-07 14:57:48 | MOVE player=2 name=B col=2 row=1
+2026-02-07 14:57:48 | TURN player=3 name=C
+2026-02-07 14:57:49 | MOVE player=3 name=C col=2 row=0
+2026-02-07 14:57:50 | GAME_DRAW round=2
+2026-02-07 15:13:49 | ROUND_START round=3
+2026-02-07 15:13:49 | GAME_RESET
+2026-02-07 15:13:49 | TURN player=1 name=A
+2026-02-07 15:44:23 | LEAVE player=1 name=A pid=1373
+2026-02-07 15:44:23 | LEAVE player=2 name=B pid=1377
+2026-02-07 15:44:23 | LEAVE player=3 name=C pid=1381
+2026-02-07 15:45:01 | JOIN player=1 name=A pid=1783
+2026-02-07 15:45:06 | JOIN player=2 name=B pid=1785
+2026-02-07 15:45:09 | JOIN player=3 name=C pid=1787
+2026-02-07 15:45:11 | GAME_START round=1 players=3
+2026-02-07 15:45:11 | TURN player=1 name=A
+2026-02-07 15:45:20 | MOVE player=1 name=A col=7 row=7
+2026-02-07 15:45:20 | TURN player=2 name=B
+2026-02-07 15:45:24 | MOVE player=2 name=B col=6 row=7
+2026-02-07 15:45:24 | TURN player=3 name=C
+2026-02-07 15:45:29 | MOVE player=3 name=C col=5 row=7
+2026-02-07 15:45:29 | TURN player=1 name=A
+2026-02-07 15:45:29 | MOVE player=1 name=A col=7 row=6
+2026-02-07 15:45:29 | TURN player=2 name=B
+2026-02-07 15:45:29 | MOVE player=2 name=B col=6 row=6
+2026-02-07 15:45:29 | TURN player=3 name=C
+2026-02-07 15:45:31 | MOVE player=3 name=C col=5 row=6
+2026-02-07 15:45:31 | TURN player=1 name=A
+2026-02-07 15:45:31 | MOVE player=1 name=A col=7 row=5
+2026-02-07 15:45:31 | TURN player=2 name=B
+2026-02-07 15:45:31 | MOVE player=2 name=B col=6 row=5
+2026-02-07 15:45:31 | TURN player=3 name=C
+2026-02-07 15:45:33 | MOVE player=3 name=C col=5 row=5
+2026-02-07 15:45:33 | TURN player=1 name=A
+2026-02-07 15:45:33 | MOVE player=1 name=A col=7 row=4
+2026-02-07 15:47:23 | ROUND_START round=2
+2026-02-07 15:47:23 | GAME_RESET
+2026-02-07 15:47:23 | TURN player=2 name=B
+2026-02-07 15:47:23 | MOVE player=2 name=B col=6 row=7
+2026-02-07 15:47:23 | TURN player=3 name=C
+2026-02-07 15:47:42 | MOVE player=3 name=C col=5 row=7
+2026-02-07 15:47:42 | TURN player=1 name=A
+2026-02-07 15:48:37 | LEAVE player=1 name=A pid=1783
+2026-02-07 15:48:37 | LEAVE player=2 name=B pid=1785
+2026-02-07 15:48:37 | LEAVE player=3 name=C pid=1787
+2026-02-07 15:48:49 | JOIN player=1 name=A pid=1809
+2026-02-07 15:48:51 | JOIN player=2 name=B pid=1811
+2026-02-07 15:48:53 | JOIN player=3 name=C pid=1813
+2026-02-07 15:48:56 | GAME_START round=1 players=3
+2026-02-07 15:48:56 | TURN player=1 name=A
+2026-02-07 15:49:02 | MOVE player=1 name=A col=7 row=7
+2026-02-07 15:49:02 | TURN player=2 name=B
+2026-02-07 15:49:10 | MOVE player=2 name=B col=0 row=7
+2026-02-07 15:49:10 | TURN player=3 name=C
+2026-02-07 15:49:24 | MOVE player=3 name=C col=1 row=7
+2026-02-07 15:49:24 | TURN player=1 name=A
+2026-02-07 15:49:24 | MOVE player=1 name=A col=6 row=7
+2026-02-07 15:49:24 | TURN player=2 name=B
+2026-02-07 15:49:24 | MOVE player=2 name=B col=1 row=6
+2026-02-07 15:49:24 | TURN player=3 name=C
+2026-02-07 15:49:29 | MOVE player=3 name=C col=2 row=7
+2026-02-07 15:49:29 | TURN player=1 name=A
+2026-02-07 15:49:29 | MOVE player=1 name=A col=5 row=7
+2026-02-07 15:49:29 | TURN player=2 name=B
+2026-02-07 15:49:29 | MOVE player=2 name=B col=2 row=6
+2026-02-07 15:49:29 | TURN player=3 name=C
+2026-02-07 15:49:31 | MOVE player=3 name=C col=3 row=7
+2026-02-07 15:49:31 | TURN player=1 name=A
+2026-02-07 15:49:31 | MOVE player=1 name=A col=4 row=7
+2026-02-07 15:49:45 | ROUND_START round=2
+2026-02-07 15:49:45 | GAME_RESET
+2026-02-07 15:49:45 | TURN player=2 name=B
+2026-02-07 15:49:45 | MOVE player=2 name=B col=3 row=7
+2026-02-07 15:49:45 | TURN player=3 name=C
+2026-02-07 15:49:49 | MOVE player=3 name=C col=4 row=7
+2026-02-07 15:49:49 | TURN player=1 name=A
+2026-02-07 15:49:49 | MOVE player=1 name=A col=3 row=6
+2026-02-07 15:49:49 | TURN player=2 name=B
+2026-02-07 15:49:49 | MOVE player=2 name=B col=4 row=6
+2026-02-07 15:49:49 | TURN player=3 name=C
+2026-02-07 15:49:52 | MOVE player=3 name=C col=6 row=7
+2026-02-07 15:49:52 | TURN player=1 name=A
+2026-02-07 15:49:52 | MOVE player=1 name=A col=2 row=7
+2026-02-07 15:49:52 | TURN player=2 name=B
+2026-02-07 15:49:52 | MOVE player=2 name=B col=5 row=7
+2026-02-07 15:49:52 | TURN player=3 name=C
+2026-02-07 15:49:54 | MOVE player=3 name=C col=6 row=6
+2026-02-07 15:49:54 | TURN player=1 name=A
+2026-02-07 15:49:54 | MOVE player=1 name=A col=1 row=7
+2026-02-07 15:49:54 | TURN player=2 name=B
+2026-02-07 15:49:54 | MOVE player=2 name=B col=6 row=5
+2026-02-07 15:49:54 | TURN player=3 name=C
+2026-02-07 15:49:57 | MOVE player=3 name=C col=1 row=6
+2026-02-07 15:49:57 | TURN player=1 name=A
+2026-02-07 15:50:08 | MOVE player=1 name=A col=7 row=7
+2026-02-07 15:50:08 | TURN player=2 name=B
+2026-02-07 15:50:08 | MOVE player=2 name=B col=7 row=6
+2026-02-07 15:50:08 | TURN player=3 name=C
+2026-02-07 15:50:12 | MOVE player=3 name=C col=2 row=6
+2026-02-07 15:50:12 | TURN player=1 name=A
+2026-02-07 15:50:16 | MOVE player=1 name=A col=5 row=6
+2026-02-07 15:50:16 | TURN player=2 name=B
+2026-02-07 15:50:19 | MOVE player=2 name=B col=6 row=4
+2026-02-07 15:50:19 | TURN player=3 name=C
+2026-02-07 15:50:21 | MOVE player=3 name=C col=7 row=5
+2026-02-07 15:50:21 | TURN player=1 name=A
+2026-02-07 15:50:23 | MOVE player=1 name=A col=0 row=7
+2026-02-07 15:50:23 | TURN player=2 name=B
+2026-02-07 15:50:35 | MOVE player=2 name=B col=7 row=4
+2026-02-07 15:50:35 | TURN player=3 name=C
+2026-02-07 15:50:37 | MOVE player=3 name=C col=3 row=5
+2026-02-07 15:50:37 | TURN player=1 name=A
+2026-02-07 15:50:37 | MOVE player=1 name=A col=3 row=4
+2026-02-07 15:50:37 | TURN player=2 name=B
+2026-02-07 15:50:40 | MOVE player=2 name=B col=2 row=5
+2026-02-07 15:50:40 | TURN player=3 name=C
+2026-02-07 15:50:43 | MOVE player=3 name=C col=0 row=6
+2026-02-07 15:50:43 | TURN player=1 name=A
+2026-02-07 15:50:43 | MOVE player=1 name=A col=2 row=4
+2026-02-07 15:50:43 | TURN player=2 name=B
+2026-02-07 15:50:46 | MOVE player=2 name=B col=1 row=5
+2026-02-07 15:50:46 | TURN player=3 name=C
+2026-02-07 15:50:48 | MOVE player=3 name=C col=0 row=5
+2026-02-07 15:50:48 | TURN player=1 name=A
+2026-02-07 15:50:48 | MOVE player=1 name=A col=5 row=5
+2026-02-07 15:50:48 | TURN player=2 name=B
+2026-02-07 15:50:53 | MOVE player=2 name=B col=4 row=5
+2026-02-07 15:50:53 | TURN player=3 name=C
+2026-02-07 15:51:03 | MOVE player=3 name=C col=4 row=4
+2026-02-07 15:51:03 | TURN player=1 name=A
+2026-02-07 15:51:03 | MOVE player=1 name=A col=6 row=3
+2026-02-07 15:51:03 | TURN player=2 name=B
+2026-02-07 15:51:03 | MOVE player=2 name=B col=4 row=3
+2026-02-07 15:51:03 | TURN player=3 name=C
+2026-02-07 15:51:07 | MOVE player=3 name=C col=5 row=4
+2026-02-07 15:51:07 | TURN player=1 name=A
+2026-02-07 15:51:07 | MOVE player=1 name=A col=7 row=3
+2026-02-07 15:51:07 | TURN player=2 name=B
+2026-02-07 15:51:14 | MOVE player=2 name=B col=7 row=2
+2026-02-07 15:51:14 | TURN player=3 name=C
+2026-02-07 15:51:20 | MOVE player=3 name=C col=6 row=2
+2026-02-07 15:51:20 | TURN player=1 name=A
+2026-02-07 15:51:20 | MOVE player=1 name=A col=2 row=3
+2026-02-07 15:51:20 | TURN player=2 name=B
+2026-02-07 15:51:20 | MOVE player=2 name=B col=7 row=1
+2026-02-07 15:51:20 | TURN player=3 name=C
+2026-02-07 15:51:21 | MOVE player=3 name=C col=6 row=1
+2026-02-07 15:51:21 | TURN player=1 name=A
+2026-02-07 15:51:27 | MOVE player=1 name=A col=0 row=4
+2026-02-07 15:51:27 | TURN player=2 name=B
+2026-02-07 15:51:27 | MOVE player=2 name=B col=7 row=0
+2026-02-07 15:51:27 | TURN player=3 name=C
+2026-02-07 15:51:27 | MOVE player=3 name=C col=6 row=0
+2026-02-07 15:51:27 | TURN player=1 name=A
+2026-02-07 15:51:30 | MOVE player=1 name=A col=0 row=3
+2026-02-07 15:51:30 | TURN player=2 name=B
+2026-02-07 15:51:34 | MOVE player=2 name=B col=1 row=4
+2026-02-07 15:51:34 | TURN player=3 name=C
+2026-02-07 15:51:38 | MOVE player=3 name=C col=4 row=2
+2026-02-07 15:51:38 | TURN player=1 name=A
+2026-02-07 15:51:40 | MOVE player=1 name=A col=5 row=3
+2026-02-07 15:51:40 | TURN player=2 name=B
+2026-02-07 15:51:43 | MOVE player=2 name=B col=5 row=2
+2026-02-07 15:51:43 | TURN player=3 name=C
+2026-02-07 15:51:47 | MOVE player=3 name=C col=5 row=1
+2026-02-07 15:51:47 | TURN player=1 name=A
+2026-02-07 15:51:49 | MOVE player=1 name=A col=5 row=0
+2026-02-07 15:51:49 | TURN player=2 name=B
+2026-02-07 15:51:51 | MOVE player=2 name=B col=4 row=1
+2026-02-07 15:51:51 | TURN player=3 name=C
+2026-02-07 15:51:52 | MOVE player=3 name=C col=4 row=0
+2026-02-07 15:51:52 | TURN player=1 name=A
+2026-02-07 15:51:55 | MOVE player=1 name=A col=3 row=3
+2026-02-07 15:51:55 | TURN player=2 name=B
+2026-02-07 15:51:59 | MOVE player=2 name=B col=3 row=2
+2026-02-07 15:51:59 | TURN player=3 name=C
+2026-02-07 15:52:02 | MOVE player=3 name=C col=2 row=2
+2026-02-07 15:52:02 | TURN player=1 name=A
+2026-02-07 15:52:05 | MOVE player=1 name=A col=3 row=1
+2026-02-07 15:52:05 | TURN player=2 name=B
+2026-02-07 15:52:09 | MOVE player=2 name=B col=1 row=3
+2026-02-07 15:52:09 | TURN player=3 name=C
+2026-02-07 15:52:11 | MOVE player=3 name=C col=1 row=2
+2026-02-07 15:52:11 | TURN player=1 name=A
+2026-02-07 15:52:13 | MOVE player=1 name=A col=0 row=2
+2026-02-07 15:52:13 | TURN player=2 name=B
+2026-02-07 15:52:16 | MOVE player=2 name=B col=1 row=1
+2026-02-07 15:52:16 | TURN player=3 name=C
+2026-02-07 15:52:18 | MOVE player=3 name=C col=2 row=1
+2026-02-07 15:52:18 | TURN player=1 name=A
+2026-02-07 15:52:20 | MOVE player=1 name=A col=3 row=0
+2026-02-07 15:52:20 | TURN player=2 name=B
+2026-02-07 15:52:25 | MOVE player=2 name=B col=2 row=0
+2026-02-07 15:52:25 | TURN player=3 name=C
+2026-02-07 15:52:26 | MOVE player=3 name=C col=1 row=0
+2026-02-07 15:52:26 | TURN player=1 name=A
+2026-02-07 15:52:29 | MOVE player=1 name=A col=0 row=1
+2026-02-07 15:52:46 | ROUND_START round=3
+2026-02-07 15:52:46 | GAME_RESET
+2026-02-07 15:52:46 | TURN player=2 name=B
+2026-02-07 15:53:09 | MOVE player=2 name=B col=0 row=7
+2026-02-07 15:53:09 | TURN player=3 name=C
+2026-02-07 15:53:18 | MOVE player=3 name=C col=1 row=7
+2026-02-07 15:53:18 | TURN player=1 name=A
+2026-02-07 15:53:21 | MOVE player=1 name=A col=2 row=7
+2026-02-07 15:53:21 | TURN player=2 name=B
+2026-02-07 15:53:21 | MOVE player=2 name=B col=0 row=6
+2026-02-07 15:53:21 | TURN player=3 name=C
+2026-02-07 15:53:21 | MOVE player=3 name=C col=1 row=6
+2026-02-07 15:53:21 | TURN player=1 name=A
+2026-02-07 15:53:21 | MOVE player=1 name=A col=2 row=6
+2026-02-07 15:53:21 | TURN player=2 name=B
+2026-02-07 15:53:21 | MOVE player=2 name=B col=0 row=5
+2026-02-07 15:53:21 | TURN player=3 name=C
+2026-02-07 15:53:21 | MOVE player=3 name=C col=1 row=5
+2026-02-07 15:53:21 | TURN player=1 name=A
+2026-02-07 15:53:22 | MOVE player=1 name=A col=2 row=5
+2026-02-07 15:53:22 | TURN player=2 name=B
+2026-02-07 15:53:35 | MOVE player=2 name=B col=3 row=7
+2026-02-07 15:53:35 | TURN player=3 name=C
+2026-02-07 15:53:39 | MOVE player=3 name=C col=4 row=7
+2026-02-07 15:53:39 | TURN player=1 name=A
+2026-02-07 15:53:42 | MOVE player=1 name=A col=5 row=7
+2026-02-07 15:53:42 | TURN player=2 name=B
+2026-02-07 15:53:42 | MOVE player=2 name=B col=3 row=6
+2026-02-07 15:53:42 | TURN player=3 name=C
+2026-02-07 15:53:42 | MOVE player=3 name=C col=4 row=6
+2026-02-07 15:53:42 | TURN player=1 name=A
+2026-02-07 15:53:42 | MOVE player=1 name=A col=5 row=6
+2026-02-07 15:53:42 | TURN player=2 name=B
+2026-02-07 15:53:42 | MOVE player=2 name=B col=3 row=5
+2026-02-07 15:53:42 | TURN player=3 name=C
+2026-02-07 15:53:42 | MOVE player=3 name=C col=4 row=5
+2026-02-07 15:53:42 | TURN player=1 name=A
+2026-02-07 15:53:43 | MOVE player=1 name=A col=5 row=5
+2026-02-07 15:53:43 | TURN player=2 name=B
+2026-02-07 15:54:35 | MOVE player=2 name=B col=6 row=7
+2026-02-07 15:54:35 | TURN player=3 name=C
+2026-02-07 15:54:37 | MOVE player=3 name=C col=7 row=7
+2026-02-07 15:54:37 | TURN player=1 name=A
+2026-02-07 15:54:43 | MOVE player=1 name=A col=0 row=4
+2026-02-07 15:54:43 | TURN player=2 name=B
+2026-02-07 15:54:43 | MOVE player=2 name=B col=6 row=6
+2026-02-07 15:54:43 | TURN player=3 name=C
+2026-02-07 15:54:43 | MOVE player=3 name=C col=7 row=6
+2026-02-07 15:54:43 | TURN player=1 name=A
+2026-02-07 15:54:46 | MOVE player=1 name=A col=0 row=3
+2026-02-07 15:54:46 | TURN player=2 name=B
+2026-02-07 15:54:46 | MOVE player=2 name=B col=6 row=5
+2026-02-07 15:54:46 | TURN player=3 name=C
+2026-02-07 15:55:00 | MOVE player=3 name=C col=7 row=5
+2026-02-07 15:55:00 | TURN player=1 name=A
+2026-02-07 15:55:00 | MOVE player=1 name=A col=0 row=2
+2026-02-07 15:55:00 | TURN player=2 name=B
+2026-02-07 15:55:11 | MOVE player=2 name=B col=7 row=4
+2026-02-07 15:55:11 | TURN player=3 name=C
+2026-02-07 15:55:14 | MOVE player=3 name=C col=6 row=4
+2026-02-07 15:55:14 | TURN player=1 name=A
+2026-02-07 15:55:21 | MOVE player=1 name=A col=4 row=4
+2026-02-07 15:55:21 | TURN player=2 name=B
+2026-02-07 15:55:21 | MOVE player=2 name=B col=7 row=3
+2026-02-07 15:55:21 | TURN player=3 name=C
+2026-02-07 15:55:21 | MOVE player=3 name=C col=6 row=3
+2026-02-07 15:55:21 | TURN player=1 name=A
+2026-02-07 15:55:22 | MOVE player=1 name=A col=4 row=3
+2026-02-07 15:55:22 | TURN player=2 name=B
+2026-02-07 15:55:22 | MOVE player=2 name=B col=7 row=2
+2026-02-07 15:55:22 | TURN player=3 name=C
+2026-02-07 15:55:22 | MOVE player=3 name=C col=6 row=2
+2026-02-07 15:55:22 | TURN player=1 name=A
+2026-02-07 15:55:23 | MOVE player=1 name=A col=4 row=2
+2026-02-07 15:55:23 | TURN player=2 name=B
+2026-02-07 15:55:30 | MOVE player=2 name=B col=1 row=4
+2026-02-07 15:55:30 | TURN player=3 name=C
+2026-02-07 15:55:34 | MOVE player=3 name=C col=2 row=4
+2026-02-07 15:55:34 | TURN player=1 name=A
+2026-02-07 15:55:41 | MOVE player=1 name=A col=3 row=4
+2026-02-07 15:55:41 | TURN player=2 name=B
+2026-02-07 15:55:41 | MOVE player=2 name=B col=1 row=3
+2026-02-07 15:55:41 | TURN player=3 name=C
+2026-02-07 15:55:41 | MOVE player=3 name=C col=2 row=3
+2026-02-07 15:55:41 | TURN player=1 name=A
+2026-02-07 15:55:42 | MOVE player=1 name=A col=3 row=3
+2026-02-07 15:55:42 | TURN player=2 name=B
+2026-02-07 15:55:42 | MOVE player=2 name=B col=1 row=2
+2026-02-07 15:55:42 | TURN player=3 name=C
+2026-02-07 15:55:42 | MOVE player=3 name=C col=2 row=2
+2026-02-07 15:55:42 | TURN player=1 name=A
+2026-02-07 15:55:42 | MOVE player=1 name=A col=3 row=2
+2026-02-07 15:55:42 | TURN player=2 name=B
+2026-02-07 15:55:48 | MOVE player=2 name=B col=5 row=4
+2026-02-07 15:55:48 | TURN player=3 name=C
+2026-02-07 15:55:56 | MOVE player=3 name=C col=5 row=3
+2026-02-07 15:55:56 | TURN player=1 name=A
+2026-02-07 15:56:01 | MOVE player=1 name=A col=7 row=1
+2026-02-07 15:56:01 | TURN player=2 name=B
+2026-02-07 15:56:05 | MOVE player=2 name=B col=5 row=2
+2026-02-07 15:56:05 | TURN player=3 name=C
+2026-02-07 15:56:11 | MOVE player=3 name=C col=0 row=1
+2026-02-07 15:56:11 | TURN player=1 name=A
+2026-02-07 15:56:15 | MOVE player=1 name=A col=6 row=1
+2026-02-07 15:56:15 | TURN player=2 name=B
+2026-02-07 15:56:17 | MOVE player=2 name=B col=5 row=1
+2026-02-07 15:56:17 | TURN player=3 name=C
+2026-02-07 15:56:22 | MOVE player=3 name=C col=4 row=1
+2026-02-07 15:56:22 | TURN player=1 name=A
+2026-02-07 15:56:29 | MOVE player=1 name=A col=2 row=1
+2026-02-07 15:56:29 | TURN player=2 name=B
+2026-02-07 15:56:34 | MOVE player=2 name=B col=3 row=1
+2026-02-07 15:56:34 | TURN player=3 name=C
+2026-02-07 15:56:38 | MOVE player=3 name=C col=1 row=1
+2026-02-07 15:56:38 | TURN player=1 name=A
+2026-02-07 15:56:42 | MOVE player=1 name=A col=0 row=0
+2026-02-07 15:56:42 | TURN player=2 name=B
+2026-02-07 15:56:46 | MOVE player=2 name=B col=1 row=0
+2026-02-07 15:56:46 | TURN player=3 name=C
+2026-02-07 15:56:48 | MOVE player=3 name=C col=2 row=0
+2026-02-07 15:56:48 | TURN player=1 name=A
+2026-02-07 15:56:50 | MOVE player=1 name=A col=3 row=0
+2026-02-07 15:56:50 | TURN player=2 name=B
+2026-02-07 15:56:52 | MOVE player=2 name=B col=4 row=0
+2026-02-07 15:56:52 | TURN player=3 name=C
+2026-02-07 15:56:53 | MOVE player=3 name=C col=5 row=0
+2026-02-07 15:56:53 | TURN player=1 name=A
+2026-02-07 15:56:56 | MOVE player=1 name=A col=6 row=0
+2026-02-07 15:56:56 | TURN player=2 name=B
+2026-02-07 15:56:57 | MOVE player=2 name=B col=7 row=0
+2026-02-07 15:56:58 | GAME_DRAW round=3
+2026-02-07 15:57:31 | LEAVE player=1 name=A pid=1809

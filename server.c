@@ -937,8 +937,8 @@ void *scheduler_thread(void *arg) {
             int winner_idx = shared_game_state->last_move_player;
             char *winner_name = shared_game_state->player_names[winner_idx];
             printf("WINNER: %s!\n", winner_name);
-            update_score(winner_name); // Updates memory AND saves to scores.txt
-            
+            update_score(winner_name); 
+
             // 1. Prepare messages inside lock
             char final_board[1024];
             format_board(final_board, sizeof(final_board));
@@ -947,7 +947,7 @@ void *scheduler_thread(void *arg) {
             
             shared_game_state->game_state = GAME_FINISHED;
 
-            // 2. UNLOCK MUTEX (Crucial for Deadlock Prevention)
+            // 2. UNLOCK MUTEX 
             pthread_mutex_unlock(game_mutex);
 
             // 3. Broadcast Board & Win Message
@@ -958,44 +958,43 @@ void *scheduler_thread(void *arg) {
 
             // 4. SHOW LEADERBOARD
             printf("[SERVER] Broadcasting Leaderboard...\n");
-            pthread_mutex_lock(game_mutex); // Lock briefly to read scores safely
+            pthread_mutex_lock(game_mutex); 
             broadcast_leaderboard();
             pthread_mutex_unlock(game_mutex);
 
-            // 5. ASK TO START NEXT ROUND (Server-Side Control)
-            printf("\n════════════════════════════════════════\n");
-            printf(" ROUND COMPLETED. SCORES SAVED.\n");
-            printf(" (Note: If active players drop below %d, next round will auto-abort)\n", MIN_PLAYERS);
-            printf(" Start next round? (Press ENTER to start, or type 'end' to quit): ");
-            printf("\n════════════════════════════════════════\n");
-            fflush(stdout);
-            
-            // Notify clients we are waiting
-            for (int i = 0; i < MAX_PLAYERS; i++) {
-                // FIXED: Removed "[SERVER]" prefix here because client adds it automatically
-                send_to_client(i, "Waiting for admin to start next round...");
-            }
+            // 5. ASK TO START NEXT ROUND (LOOP UNTIL VALID INPUT)
+            while (1) {  // <--- ADD THIS LOOP
+                printf("\n════════════════════════════════════════\n");
+                printf(" ROUND COMPLETED. SCORES SAVED.\n");
+                printf(" (Note: If active players drop below %d, next round will auto-abort)\n", MIN_PLAYERS);
+                printf(" Start next round? (Press ENTER to start, or type 'end' to quit): ");
+                printf("\n════════════════════════════════════════\n");
+                fflush(stdout);
+                
+                char admin_input[100];
+                if (fgets(admin_input, sizeof(admin_input), stdin) != NULL) {
+                    admin_input[strcspn(admin_input, "\n")] = 0;
 
-            // --- CHANGED INPUT LOGIC ---
-            char admin_input[100];
-            if (fgets(admin_input, sizeof(admin_input), stdin) != NULL) {
-                // Remove newline character
-                admin_input[strcspn(admin_input, "\n")] = 0;
-
-                // Check if user typed "end"
-                if (strcmp(admin_input, "end") == 0) {
-                    printf("[SERVER] Admin ended the session. Shutting down...\n");
-                    
-                    // Notify clients
-                    for (int i = 0; i < MAX_PLAYERS; i++) {
-                        send_to_client(i, "GAME OVER: Admin ended the session. Server shutting down.");
+                    // Option A: Admin typed "end"
+                    if (strcmp(admin_input, "end") == 0) {
+                        printf("[SERVER] Admin ended the session. Shutting down...\n");
+                        for (int i = 0; i < MAX_PLAYERS; i++) {
+                            send_to_client(i, "GAME OVER: Admin ended the session. Server shutting down.");
+                        }
+                        cleanup(0);
                     }
-                    
-                    cleanup(0); // Exit program
+                    // Option B: Admin pressed ENTER (empty string)
+                    else if (strlen(admin_input) == 0) {
+                        break; // Breaks the while(1) loop to proceed to next round
+                    }
+                    // Option C: Invalid Input
+                    else {
+                        printf(">>> [ERROR] Invalid input: '%s'. Please press ENTER or type 'end'. <<<\n", admin_input);
+                        // Loop will repeat now!
+                    }
                 }
             }
-            // ---------------------------
-            
+
             printf("[SERVER] Starting next round...\n");
             pthread_mutex_lock(game_mutex);
             shared_game_state->round_count++;
@@ -1010,71 +1009,61 @@ void *scheduler_thread(void *arg) {
         if (check_draw()) {
             printf("Game Draw detected!\n");
 
-            // 1. Update State & Format Board (We already have the lock!)
             shared_game_state->game_state = GAME_FINISHED;
             
             char final_board[1024];
-            format_board(final_board, sizeof(final_board)); // Safe: we hold the lock
+            format_board(final_board, sizeof(final_board)); 
 
-            // 2. CRITICAL: UNLOCK NOW (Prevents Deadlock & releases board for others)
             pthread_mutex_unlock(game_mutex); 
 
-            // 3. Broadcast Final Board & Draw Message
             for (int i = 0; i < MAX_PLAYERS; i++) {
-                if (shared_game_state->active_players[i]) {
-                    send_to_client(i, final_board);
-                }
+                if (shared_game_state->active_players[i]) send_to_client(i, final_board);
             }
             usleep(50000); 
             for (int i = 0; i < MAX_PLAYERS; i++) {
-                if (shared_game_state->active_players[i]) {
-                    send_to_client(i, "\nGAME OVER! It's a DRAW! (Board Full)\n");
-                }
+                if (shared_game_state->active_players[i]) send_to_client(i, "\nGAME OVER! It's a DRAW! (Board Full)\n");
             }
             
             sleep(1); 
 
-            // 4. SHOW LEADERBOARD
             printf("[SERVER] Broadcasting Leaderboard...\n");
-            pthread_mutex_lock(game_mutex); // Lock briefly just for leaderboard read
+            pthread_mutex_lock(game_mutex); 
             broadcast_leaderboard();
             pthread_mutex_unlock(game_mutex);
-
             
             log_event("GAME_DRAW round=%d", shared_game_state->round_count);
 
-            // 5. ASK ADMIN TO START NEXT ROUND
-            printf("\n════════════════════════════════════════\n");
-            printf(" GAME DRAWN. NO SCORES CHANGED.\n");
-            printf(" (Note: If active players drop below %d, next round will auto-abort)\n", MIN_PLAYERS);
-            printf(" Start next round? (Press ENTER to start, or type 'end' to quit): ");
-            printf("\n════════════════════════════════════════\n");
-            fflush(stdout);
-            
-            // Notify clients
-            for (int i = 0; i < MAX_PLAYERS; i++) {
-                if (shared_game_state->active_players[i]) {
-                    send_to_client(i, "Waiting for admin to start next round...");
-                }
-            }
+            // 5. ASK ADMIN TO START NEXT ROUND (LOOP UNTIL VALID INPUT)
+            while (1) { // <--- ADD THIS LOOP
+                printf("\n════════════════════════════════════════\n");
+                printf(" GAME DRAWN. NO SCORES CHANGED.\n");
+                printf(" (Note: If active players drop below %d, next round will auto-abort)\n", MIN_PLAYERS);
+                printf(" Start next round? (Press ENTER to start, or type 'end' to quit): ");
+                printf("\n════════════════════════════════════════\n");
+                fflush(stdout);
 
-            // 7. WAIT FOR ADMIN INPUT
-            char admin_input[100];
-            if (fgets(admin_input, sizeof(admin_input), stdin) != NULL) {
-                admin_input[strcspn(admin_input, "\n")] = 0; 
-                
-                if (strcmp(admin_input, "end") == 0) {
-                    printf("[SERVER] Admin ended the session. Shutting down...\n");
-                    for (int i = 0; i < MAX_PLAYERS; i++) {
-                        send_to_client(i, "GAME OVER: Admin ended the session. Server shutting down.");
+                char admin_input[100];
+                if (fgets(admin_input, sizeof(admin_input), stdin) != NULL) {
+                    admin_input[strcspn(admin_input, "\n")] = 0; 
+                    
+                    if (strcmp(admin_input, "end") == 0) {
+                        printf("[SERVER] Admin ended the session. Shutting down...\n");
+                        for (int i = 0; i < MAX_PLAYERS; i++) {
+                            send_to_client(i, "GAME OVER: Admin ended the session. Server shutting down.");
+                        }
+                        cleanup(0);
                     }
-                    cleanup(0);
+                    else if (strlen(admin_input) == 0) {
+                        break; // Breaks the while(1) loop
+                    }
+                    else {
+                        printf(">>> [ERROR] Invalid input: '%s'. Please press ENTER or type 'end'. <<<\n", admin_input);
+                    }
                 }
             }
             
             printf("[SERVER] Starting next round...\n");
             
-            // 8. INCREMENT ROUND AND RESET
             pthread_mutex_lock(game_mutex);
             shared_game_state->round_count++;
             int r = shared_game_state->round_count;
