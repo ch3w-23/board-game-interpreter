@@ -51,7 +51,6 @@ int main(int argc, char *argv[]) {
     printf("[CONNECTED] Connected to server!\n");
     
     // Send registration message to server
-    // Format: "REGISTER:<player_name>"
     char register_msg[100];
     snprintf(register_msg, sizeof(register_msg), "REGISTER:%s", player_name);
     write(server_fd, register_msg, strlen(register_msg) + 1);
@@ -84,7 +83,6 @@ int main(int argc, char *argv[]) {
     char assign_buffer[100];
     int bytes = read(temp_fd, assign_buffer, sizeof(assign_buffer));
     if (bytes > 0) {
-        // Format: "ASSIGNED:<player_id>"
         if (sscanf(assign_buffer, "ASSIGNED:%d", &player_id) == 1) {
             printf("[ASSIGNED] Server assigned Player ID: %d\n", player_id + 1);
             
@@ -122,14 +120,14 @@ int main(int argc, char *argv[]) {
         ssize_t bytes_read = read(my_fd, buffer, sizeof(buffer) - 1); // Leave room for \0
         
         if (bytes_read > 0) {
-            buffer[bytes_read] = '\0'; // SAFETY: Force null-termination
+            buffer[bytes_read] = '\0'; // Force null-termination
             
             int offset = 0;
             // Loop through all messages in the buffer
             while (offset < bytes_read) {
                 char *current_msg = buffer + offset;
                 
-                // SAFETY: Ensure we don't read past the buffer
+                // Ensure we don't read past the buffer
                 int msg_len = strlen(current_msg);
                 if (offset + msg_len > bytes_read) break; 
 
@@ -141,7 +139,6 @@ int main(int argc, char *argv[]) {
                 else if (strstr(current_msg, "YOUR_TURN") != NULL) {
                     char input[32];
                     
-                    // --- FIX: Input Loop (Swallows accidental Enters) ---
                     while (1) {
                         printf("\nYOUR_TURN\n%s, Enter column (0-7) or type 'quit' to leave: ", player_name);
                         fflush(stdout);
@@ -153,7 +150,6 @@ int main(int argc, char *argv[]) {
 
                         if (strlen(input) > 0) break; // Only accept non-empty input
                     }
-                    // --------------------------------------------------
 
                     if (strcasecmp(input, "quit") == 0 || strcasecmp(input, "exit") == 0) {
                         printf("Quitting game. Goodbye!\n");
@@ -181,11 +177,10 @@ int main(int argc, char *argv[]) {
                         printf("[%s] Invalid input, please try again.\n", player_name);
                     }
                 }
-                // 3. Check for Game Over (Modified for Round 2 support)
+                // 3. Check for Game Over
                 else if (strstr(current_msg, "GAME OVER") != NULL || strstr(current_msg, "wins") != NULL) {
                     printf("\n[SERVER] %s\n", current_msg);
 
-                    // --- FIX: Check for Fatal Shutdown vs Round End ---
                     if (strstr(current_msg, "shutting down") != NULL || strstr(current_msg, "Not enough players") != NULL) {
                         printf("Game session aborted by server. Exiting.\n");
                         close(my_fd);

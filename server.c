@@ -55,17 +55,15 @@ typedef struct {
     sem_t move_sem;                       // signals scheduler that a valid move was applied
     char player_names[MAX_PLAYERS][MAX_NAME_LENGTH];  // Player names
 
-    PlayerScore scores[100]; // Store up to 100 distinct playersplayers
+    PlayerScore scores[100]; // Store up to 100 distinct players
     int total_scores_stored;
     int round_count;
 
-    //  ADD LOGGER QUEUE INSIDE SHARED MEMORY
     char log_queue[LOG_QUEUE_CAP][LOG_MSG_MAX];
     int log_head;
     int log_tail;
     int log_count;
 
-    //  ADD SEMAPHORES INSIDE SHARED MEMORY
     sem_t log_items;
     sem_t log_space;
 } game_state_t;
@@ -75,7 +73,7 @@ game_state_t *shared_game_state = NULL;
 
 int last_move_row; // Last move row
 
-// ---- Logger queue (shared so fork()ed children can enqueue safely) ----
+// Logger queue (shared so fork()ed children can enqueue safely)
 char log_queue[LOG_QUEUE_CAP][LOG_MSG_MAX];
 int log_head;
 int log_tail;
@@ -130,9 +128,9 @@ void get_lobby_list(char *buffer, int max_count) {
     sprintf(line, "Current Players (%d connected):\n", max_count);
     strcat(buffer, line);
 
-    // List names: 1=Alice, 2=Bob...
+    // List names
     for (int i = 0; i < max_count; i++) {
-        // We use safe shared memory access here
+        
         sprintf(line, "  %d = %s", i + 1, shared_game_state->player_names[i]);
         strcat(buffer, line);
         
@@ -174,11 +172,10 @@ int main(int argc, char *argv[]) {
     shared_game_state->log_tail = 0;
     shared_game_state->log_count = 0;
 
-    // Initialize process-shared semaphores for logger (pshared=1)
-    // (Safe here: before fork())
+    // Initialize process-shared semaphores for logger
     sem_init(&shared_game_state->log_items, 1, 0);
     sem_init(&shared_game_state->log_space, 1, LOG_QUEUE_CAP);
-    // Scheduler wait semaphore (pshared=1, initial=0)
+    // Scheduler wait semaphore
     sem_init(&shared_game_state->move_sem, 1, 0);
 
     // Initialize board
@@ -218,13 +215,12 @@ int main(int argc, char *argv[]) {
 
         // After connection, fork the player process
         create_player_process(player_id);
-        // --- NEW ADDITION: Broadcast update to EXISTING players ---
-        // We want to notify everyone who joined BEFORE this new player
+        
         if (player_id > 0) {
             char update_msg[512];
             char list_buffer[400];
             
-            // Generate the list (now includes the new player)
+            // Generate the list
             get_lobby_list(list_buffer, player_id + 1);
             
             sprintf(update_msg, "\n[INFO] A new player has joined!\n%s", list_buffer);
@@ -234,7 +230,7 @@ int main(int argc, char *argv[]) {
                 send_to_client(prev, update_msg);
             }
         }
-        // ----------------------------------------------------------
+        
         player_id++;
         
         // Auto-start if max players reached
@@ -283,12 +279,12 @@ int main(int argc, char *argv[]) {
         printf("\n");
     }
     
-    // Game loop would start here (Member 3's work)
+    // Game loop would start here
     printf("\n[GAME READY] Game initialized with %d players\n", 
            shared_game_state->player_count);
     printf("[WAITING] For scheduler thread to start...\n");
     
-    // Wait for children (in real implementation, this would be in background)
+    // Wait for children
     while (1) {
         pause(); // Wait for signals
     }
@@ -298,7 +294,7 @@ int main(int argc, char *argv[]) {
 
 void init_shared_memory() {
     // Create shared memory segment
-    shmid = shmget(SHM_KEY, sizeof(game_state_t), IPC_CREAT | 0666); //(rw-rw-rw-) - read/write for all
+    shmid = shmget(SHM_KEY, sizeof(game_state_t), IPC_CREAT | 0666); 
     if (shmid < 0) {
         perror("shmget failed");
         exit(1);
@@ -422,13 +418,12 @@ void sigchld_handler(int sig) {
 
             log_event("LEAVE player=%d name=%s pid=%d", player_idx + 1, pname, pid);
             
-            // --- CRITICAL FIX: WAKE UP THE SCHEDULER ---
             // This kicks the scheduler out of sem_wait() so it can realize the game is over
             sem_post(&shared_game_state->move_sem); 
         }
     }
 
-    // 3. Auto-shutdown if EVERYONE is gone (Fail-safe)
+    // 3. Auto-shutdown if everyone is gone (Fail-safe)
     pthread_mutex_lock(game_mutex);
     int remaining = 0;
     int total_joined = shared_game_state->player_count;
@@ -562,18 +557,16 @@ void create_player_process(int player_id) {
             exit(1);
         }
         
-        // --- CHANGED SECTION: Send Detailed Lobby Status ---
         char welcome_msg[512];
         char list_buffer[400];
         
-        // Generate list of players (including myself, so count is player_id + 1)
+        // Generate list of players
         get_lobby_list(list_buffer, player_id + 1);
         
         sprintf(welcome_msg, "Welcome Player %d! You have joined the lobby.\n%s", 
                 player_id + 1, list_buffer);
                 
         write(client_fd, welcome_msg, strlen(welcome_msg) + 1);
-        // ---------------------------------------------------
 
         monitor_and_broadcast_updates(player_id, client_fd);
         
@@ -593,13 +586,12 @@ void create_player_process(int player_id) {
 
         printf("Player %d connected (PID: %d)\n", player_id + 1, pid);
 
-        //  ADD join logging 
         log_event("JOIN player=%d name=%s pid=%d", player_id + 1, pname, pid);
     }
 }
 
 void monitor_and_broadcast_updates(int player_id, int client_fd) {
-    int last_seen_move = -1; // <--- CHANGE THIS BACK TO -1
+    int last_seen_move = -1;
     struct pollfd pfd;
 
     // Set up polling to check for errors/disconnection
@@ -616,7 +608,6 @@ void monitor_and_broadcast_updates(int player_id, int client_fd) {
             }
         }
 
-        // --- Check if we are still in Lobby ---
         pthread_mutex_lock(game_mutex);
         int current_state = shared_game_state->game_state;
         int current_move_count = shared_game_state->move_count;
@@ -631,10 +622,6 @@ void monitor_and_broadcast_updates(int player_id, int client_fd) {
         // 2. Board Update Check
         if (current_move_count != last_seen_move) {
             
-            // --- LOGIC START ---
-            // If I am the active player, the Scheduler sends the board manually.
-            // So I (Monitor) should skip sending to avoid a double-print.
-            // Everyone else (P2, P3) needs the board from here.
             if (player_id == current_player && current_state != GAME_FINISHED) {
                 // Just update local tracker, don't write to pipe
                 last_seen_move = current_move_count;
@@ -653,9 +640,8 @@ void monitor_and_broadcast_updates(int player_id, int client_fd) {
                     break; 
                 }
             }
-            // --- LOGIC END ---
         }
-        usleep(100000); // 100ms polling interval
+        usleep(100000);
     }
 }
 
@@ -794,12 +780,11 @@ void broadcast_leaderboard() {
     int display_rank = 1;
 
     for (int i = 0; i < count && i < 10; i++) { // Top 10 only
-        // Update rank ONLY if this player has fewer wins than the previous one
+        // Update rank only if this player has fewer wins than the previous one
         if (i > 0 && temp_scores[i].wins < temp_scores[i-1].wins) {
             display_rank++; 
         }
         
-        // Use 'display_rank' instead of 'i + 1'
         sprintf(line, " #%-3d %-15s %d\n", display_rank, temp_scores[i].name, temp_scores[i].wins);
         strcat(leaderboard_msg, line);
     }
@@ -818,16 +803,12 @@ void *scheduler_thread(void *arg) {
     int current = 0;
 
     while (1) {
-        // ==========================================================
-        //  PART 1: CHECK FOR SUFFICIENT PLAYERS (SHUTDOWN LOGIC)
-        // ==========================================================
         pthread_mutex_lock(game_mutex);
         int active_count = 0;
         for (int i = 0; i < MAX_PLAYERS; i++) {
             if (shared_game_state->active_players[i]) active_count++;
         }
 
-        // IF BELOW MINIMUM PLAYERS -> ABORT GAME & SHUT DOWN
         if (active_count < MIN_PLAYERS) {
             if (shared_game_state->game_state != GAME_FINISHED) {
                 printf("\n══════════════════════════════════════════\n");
@@ -852,9 +833,6 @@ void *scheduler_thread(void *arg) {
         }
         pthread_mutex_unlock(game_mutex);
 
-        // ==========================================================
-        //  PART 2: PICK NEXT PLAYER
-        // ==========================================================
         pthread_mutex_lock(game_mutex);
         int found = 0;
         int chosen = -1;
@@ -883,9 +861,6 @@ void *scheduler_thread(void *arg) {
             continue;
         }
 
-        // ==========================================================
-        //  PART 3: TURN LOGIC
-        // ==========================================================
         log_event("TURN player=%d name=%s", chosen + 1, pname);
 
         // Send Board Explicitly
@@ -928,9 +903,6 @@ void *scheduler_thread(void *arg) {
         }
         pthread_mutex_unlock(game_mutex);
 
-        // ==========================================================
-        //  PART 4: CHECK WIN/DRAW
-        // ==========================================================
         pthread_mutex_lock(game_mutex);
         int won = check_win();
         if (won) {
@@ -947,7 +919,7 @@ void *scheduler_thread(void *arg) {
             
             shared_game_state->game_state = GAME_FINISHED;
 
-            // 2. UNLOCK MUTEX 
+            // 2. Unlock Mutex
             pthread_mutex_unlock(game_mutex);
 
             // 3. Broadcast Board & Win Message
@@ -956,14 +928,14 @@ void *scheduler_thread(void *arg) {
             for (int i = 0; i < MAX_PLAYERS; i++) send_to_client(i, win_msg);
             sleep(1); 
 
-            // 4. SHOW LEADERBOARD
+            // 4. Show Leaderboard
             printf("[SERVER] Broadcasting Leaderboard...\n");
             pthread_mutex_lock(game_mutex); 
             broadcast_leaderboard();
             pthread_mutex_unlock(game_mutex);
 
-            // 5. ASK TO START NEXT ROUND (LOOP UNTIL VALID INPUT)
-            while (1) {  // <--- ADD THIS LOOP
+            // 5. Ask to start next round
+            while (1) { 
                 printf("\n════════════════════════════════════════\n");
                 printf(" ROUND COMPLETED. SCORES SAVED.\n");
                 printf(" (Note: If active players drop below %d, next round will auto-abort)\n", MIN_PLAYERS);
@@ -975,7 +947,7 @@ void *scheduler_thread(void *arg) {
                 if (fgets(admin_input, sizeof(admin_input), stdin) != NULL) {
                     admin_input[strcspn(admin_input, "\n")] = 0;
 
-                    // Option A: Admin typed "end"
+                    // Admin typed "end"
                     if (strcmp(admin_input, "end") == 0) {
                         printf("[SERVER] Admin ended the session. Shutting down...\n");
                         for (int i = 0; i < MAX_PLAYERS; i++) {
@@ -983,14 +955,14 @@ void *scheduler_thread(void *arg) {
                         }
                         cleanup(0);
                     }
-                    // Option B: Admin pressed ENTER (empty string)
+                    // Admin pressed ENTER (empty string)
                     else if (strlen(admin_input) == 0) {
                         break; // Breaks the while(1) loop to proceed to next round
                     }
-                    // Option C: Invalid Input
+                    // Invalid Input
                     else {
                         printf(">>> [ERROR] Invalid input: '%s'. Please press ENTER or type 'end'. <<<\n", admin_input);
-                        // Loop will repeat now!
+                        // Loop will repeat 
                     }
                 }
             }
@@ -1033,8 +1005,7 @@ void *scheduler_thread(void *arg) {
             
             log_event("GAME_DRAW round=%d", shared_game_state->round_count);
 
-            // 5. ASK ADMIN TO START NEXT ROUND (LOOP UNTIL VALID INPUT)
-            while (1) { // <--- ADD THIS LOOP
+            while (1) {
                 printf("\n════════════════════════════════════════\n");
                 printf(" GAME DRAWN. NO SCORES CHANGED.\n");
                 printf(" (Note: If active players drop below %d, next round will auto-abort)\n", MIN_PLAYERS);
@@ -1108,9 +1079,9 @@ void *server_reader_thread(void *arg) {
             buffer[n] = '\0';
 
             int player_num = -1, col = -1;
-            // Expected: PLAYER_<n>_MOVE_<col>
+
             if (sscanf(buffer, "PLAYER_%d_MOVE_%d", &player_num, &col) == 2) {
-                player_num -= 1; // convert to 0-based
+                player_num -= 1;
 
                 int ok = 0;
                 int moved_row = -1;
@@ -1212,11 +1183,9 @@ void update_score(const char *winner_name) {
         shared_game_state->total_scores_stored++;
     }
 
-    // --- NEW ADDITION ---
-    scores_modified = 1; // Mark that we have unsaved/new data (conceptually)
-    // --------------------
+    scores_modified = 1; // Mark that we have unsaved/new data
 
-    save_scores(); // We still save immediately for safety
+    save_scores();
 }
 
 // Reset the board for the next game
@@ -1232,7 +1201,7 @@ void reset_game() {
         }
     }
     
-    // Reset game flags but KEEP players connected
+    // Reset game flags but keep players connected
     shared_game_state->move_count = 0;
     shared_game_state->game_state = GAME_ONGOING;
     shared_game_state->winner = -1;
@@ -1255,33 +1224,17 @@ void reset_game() {
     }
 }
 
-/*
- * ============================================================================
- * GAME LOGIC IMPLEMENTATION
- * Below are the improved game logic functions for Connect Four
- * ============================================================================
- */
 
-/*
- * FUNCTION: format_board
- * PURPOSE: Renders the game board as a formatted string for display to clients
- */
+//Renders the game board as a formatted string for display to clients
+
 void format_board(char *out, size_t out_size) {
     char *p = out;
     size_t remain = out_size;
     int wrote;
     
-    // Header with move count - Fixed alignment
-    // The top border has 27 '=' characters.
-    // " CONNECT FOUR - MOVE " is 21 chars.
-    // "%02d" is 2 chars.
-    // We need 4 spaces at the end to equal 27.
-    
     wrote = snprintf(p, remain, "\n  ╔═══════════════════════════╗\n");
     p += wrote; remain -= (remain > wrote ? wrote : remain);
     
-    // Changed %2d to %02d for zero-padding (e.g., "05") which looks techier, 
-    // and added exactly 4 spaces at the end to align the right border.
     wrote = snprintf(p, remain, "  ║ CONNECT FOUR - MOVE %02d    ║\n", 
                      shared_game_state->move_count);
     p += wrote; remain -= (remain > wrote ? wrote : remain);
@@ -1289,7 +1242,7 @@ void format_board(char *out, size_t out_size) {
     wrote = snprintf(p, remain, "  ╚═══════════════════════════╝\n");
     p += wrote; remain -= (remain > wrote ? wrote : remain);
     
-    // Column numbers header - properly spaced
+    // Column numbers header
     wrote = snprintf(p, remain, "    0  1  2  3  4  5  6  7\n");
     p += wrote; remain -= (remain > wrote ? wrote : remain);
     
@@ -1305,7 +1258,7 @@ void format_board(char *out, size_t out_size) {
         for (int j = 0; j < BOARD_COLS; j++) {
             char cell = shared_game_state->board[i][j];
             
-            // Highlight the last move with brackets - consistent spacing
+            // Highlight the last move with brackets
             if (i == shared_game_state->last_move_row && 
                 j == shared_game_state->last_move_col &&
                 shared_game_state->last_move_player >= 0) {
@@ -1340,25 +1293,23 @@ void format_board(char *out, size_t out_size) {
     snprintf(p, remain, "\n");
 }
 
-/*
- * FUNCTION: apply_move
- * PURPOSE: Applies a player's move to the board with gravity simulation
- */
+//Applies a player's move to the board with gravity simulation
+
 int apply_move(int player_id, int col) {
-    // Validation 1: Check column range
+    // Check column range
     if (col < 0 || col >= BOARD_COLS) {
         printf("[GAME LOGIC] Invalid move: Column %d out of range (0-%d)\n", 
                col, BOARD_COLS - 1);
         return 0;
     }
     
-    // Validation 2: Check if column is full (top row occupied)
+    // Check if column is full (top row occupied)
     if (shared_game_state->board[0][col] != '.') {
         printf("[GAME LOGIC] Invalid move: Column %d is full\n", col);
         return 0;
     }
     
-    // Apply gravity: Find the lowest empty row in this column
+    // Find the lowest empty row in this column
     for (int row = BOARD_ROWS - 1; row >= 0; row--) {
         if (shared_game_state->board[row][col] == '.') {
             // Place the token
@@ -1381,10 +1332,8 @@ int apply_move(int player_id, int col) {
     return 0;
 }
 
-/*
- * FUNCTION: check_direction
- * PURPOSE: Helper function to check for 4-in-a-row in a specific direction
- */
+//Helper function to check for 4-in-a-row in a specific direction
+
 static int check_direction(int row, int col, int delta_row, int delta_col, char player_token) {
     char (*b)[BOARD_COLS] = shared_game_state->board;
     
@@ -1429,12 +1378,12 @@ int check_win() {
         return 0;
     }
     
-    // Direction vectors: {delta_row, delta_col}
+    // Direction vectors
     int directions[4][2] = {
-        {0, 1},   // Horizontal (right)
-        {1, 0},   // Vertical (down)
-        {1, 1},   // Diagonal (down-right)
-        {1, -1}   // Anti-diagonal (down-left)
+        {0, 1},   // Horizontal
+        {1, 0},   // Vertical
+        {1, 1},   // Diagonal
+        {1, -1}   // Anti-diagonal
     };
     
     for (int dir = 0; dir < 4; dir++) {
